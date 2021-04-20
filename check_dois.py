@@ -33,6 +33,6 @@ with open("doi_check.csv", "w", newline='', encoding='Latin1') as result:
 # In this way, many hours are still required to complete the function, 
 # but at least you know where it is and, unless the PC turns off, it should not crash.
 if len(doi_logs) > 0:
-    print("[Support: INFO] Errors have been found. Writing logs to ./logs/crossref.json")
-Support().dump_json(doi_logs, "./doi_logs.json")
+    print("[Support: INFO] Errors have been found. Writing logs to ./doi_logs.json")
+    Support().dump_json(doi_logs, "./doi_logs.json")
 
