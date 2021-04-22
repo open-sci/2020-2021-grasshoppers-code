@@ -7,14 +7,14 @@ from requests.packages.urllib3.util.retry import Retry
 class Support(object):
     @staticmethod
     def process_csv_input(path:str) -> list:
-        print(f"[Support:INFO Proccessing csv at path ${path}]")
+        print(f"[Support:INFO Proccessing csv at path {path}]")
         with open(path, 'r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             return list(reader)
     
     @staticmethod
     def dump_csv(data:list, path:str):
-        print(f"[Support:INFO Writing csv at path ${path}]")
+        print(f"[Support:INFO Writing csv at path {path}]")
         with open(path, 'w', newline='', encoding='utf8')  as output_file:
             keys = data[0].keys()
             dict_writer = csv.DictWriter(output_file, keys)
@@ -24,7 +24,7 @@ class Support(object):
     @staticmethod
     def dump_json(json_data:dict, path:str):
         with open(path, 'w') as outfile:
-            print(f"[Support: INFO] Writing json to path ${path}")
+            print(f"[Support: INFO] Writing json to path {path}")
             json.dump(json_data, outfile, sort_keys=True, indent=4)
 
     def _requests_retry_session(
@@ -45,8 +45,7 @@ class Support(object):
         session.mount('https://', adapter)
         return session
     
-    @staticmethod
-    def handle_request(url:str, cache_path:str="", error_log_dict:dict=dict()):
+    def handle_request(self, url:str, cache_path:str="", error_log_dict:dict=dict()):
         if cache_path != "":
             requests_cache.install_cache(cache_path)
         try:
