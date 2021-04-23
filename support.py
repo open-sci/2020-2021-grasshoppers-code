@@ -49,7 +49,7 @@ class Support(object):
         if cache_path != "":
             requests_cache.install_cache(cache_path)
         try:
-            data = self._requests_retry_session().get(url, timeout=60)
+            data = self._requests_retry_session().get(url, timeout=10)
             if data.status_code == 200:
                 return data.json()
             else:
