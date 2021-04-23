@@ -7,7 +7,6 @@ class Clean_DOIs(object):
         self.cache_path = cache_path
         self.logs = logs
         self.prefix_regex = "(.*?)(?:\.)?(?:HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/|HTTPS:\/\/D[0|O]I\.[0|O]RG\/)(.*)"
-        self.year_regex = "(.*?)(\(\d{4}\)?)$"
         suffix_regex1 = "\/-\/DCSUPPLEMENTAL"
         suffix_regex2 = "SUPPINF[0|O](\.)?"
         suffix_regex3 = "[\.|(|,|;]?PMID:\d+.*?"
@@ -24,9 +23,10 @@ class Clean_DOIs(object):
         suffix_regex14 = "[\.;,]PP.\d+-\d+"
         suffix_regex15 = "[\.|(|,|;]10.\d{4}\/.*?"
         suffix_regex16 = "\[DOI\].*?"
+        suffix_year_regex = "\(\d{4}\)?"
         self.suffix_regex_list = [suffix_regex1, suffix_regex2, suffix_regex3, suffix_regex4, suffix_regex5, 
                     suffix_regex6, suffix_regex7, suffix_regex8, suffix_regex9, suffix_regex10, suffix_regex11, 
-                    suffix_regex12, suffix_regex13, suffix_regex14, suffix_regex15, suffix_regex16]
+                    suffix_regex12, suffix_regex13, suffix_regex14, suffix_regex15, suffix_regex16, suffix_year_regex]
 
     def check_dois_validity(self, data:list) -> list:
         checked_dois = list()
@@ -68,7 +68,6 @@ class Clean_DOIs(object):
                 "Already_valid": row["Already_valid"],
                 "Prefix_error": classes_of_errors["prefix"],
                 "Suffix_error": classes_of_errors["suffix"],
-                "Year_error": classes_of_errors["year"],
                 "Other-type_error": classes_of_errors["other-type"]
             }
             invalid_dictionary = {
@@ -78,7 +77,6 @@ class Clean_DOIs(object):
                 "Already_valid": row["Already_valid"],
                 "Prefix_error": classes_of_errors["prefix"],
                 "Suffix_error": classes_of_errors["suffix"],
-                "Year_error": classes_of_errors["year"],
                 "Other-type_error": classes_of_errors["other-type"]
             }
             if new_doi != row["Invalid_cited_DOI"]:
@@ -99,7 +97,6 @@ class Clean_DOIs(object):
         classes_of_errors = {
             "prefix": 0,
             "suffix": 0,
-            "year": 0,
             "other-type": 0
         }
         if prefix_match:
@@ -109,10 +106,6 @@ class Clean_DOIs(object):
         if suffix_match:
             tmp_doi = suffix_match.group(1)
             classes_of_errors["suffix"] += 1
-        year_match = re.search(self.year_regex, tmp_doi)
-        if year_match:
-            tmp_doi = year_match.group(1)
-            classes_of_errors["year"] += 1
         new_doi = re.sub("\\\\", "", tmp_doi)
         new_doi = re.sub("__", "_", tmp_doi)
         new_doi = re.sub("\\.\\.", ".", tmp_doi)
