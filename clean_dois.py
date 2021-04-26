@@ -7,26 +7,28 @@ class Clean_DOIs(object):
         self.cache_path = cache_path
         self.logs = logs
         self.prefix_regex = "(.*?)(?:\.)?(?:HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/|HTTPS:\/\/D[0|O]I\.[0|O]RG\/)(.*)"
-        suffix_regex1 = "\/-\/DCSUPPLEMENTAL"
-        suffix_regex2 = "SUPPINF[0|O](\.)?"
-        suffix_regex3 = "[\.|(|,|;]?PMID:\d+.*?"
-        suffix_regex4 = "[\.|(|,|;]?PMCID:PMC\d+.*?"
-        suffix_regex5 = "[(|\[]EPUBAHEADOFPRINT[)\]]"
-        suffix_regex6 = "[\.|(|,|;]?ARTICLEPUBLISHEDONLINE.*?\d{4}"
-        suffix_regex7 = "[\.|(|,|;]*HTTP:\/\/.*?"
-        suffix_regex8 = "[\.\/](META|ABSTRACT|FULL|EPDF|PDF|SUMMARY)>?"
-        suffix_regex9 = "([\/\.](META|ABSTRACT|FULL|EPDF|PDF|SUMMARY))?[>|)](LAST)?ACCESSED\d+"
-        suffix_regex10 = "[\.|(|,|;]?[A-Z]*\.?SAGEPUB.*?"
-        suffix_regex11 = "<[A-Z\/]+>"
-        suffix_regex12 = "\.{5}.*?"
-        suffix_regex13 = "[\.|,|<|>|&|(|;]"
-        suffix_regex14 = "[\.;,]PP.\d+-\d+"
-        suffix_regex15 = "[\.|(|,|;]10.\d{4}\/.*?"
-        suffix_regex16 = "\[DOI\].*?"
-        suffix_year_regex = "\(\d{4}\)?"
-        self.suffix_regex_list = [suffix_regex1, suffix_regex2, suffix_regex3, suffix_regex4, suffix_regex5, 
-                    suffix_regex6, suffix_regex7, suffix_regex8, suffix_regex9, suffix_regex10, suffix_regex11, 
-                    suffix_regex12, suffix_regex13, suffix_regex14, suffix_regex15, suffix_regex16, suffix_year_regex]
+        suffix_dcsupplemental = "\/-\/DCSUPPLEMENTAL"
+        suffix_suppinfo = "SUPPINF[0|O](\.)?"
+        suffix_pmid1 = "[\.|\(|,|;]?PMID:\d+.*?"
+        suffix_pmid2 = "[\.|\(|,|;]?PMCID:PMC\d+.*?"
+        suffix_epub = "[\(|\[]EPUBAHEADOFPRINT[\)\]]"
+        suffix_published_online = "[\.|\(|,|;]?ARTICLEPUBLISHEDONLINE.*?\d{4}"
+        suffix_http = "[\.|\(|,|;]*HTTP:\/\/.*?"
+        suffix_subcontent = "\/(META|ABSTRACT|FULL|EPDF|PDF|SUMMARY)([>|\)](LAST)?ACCESSED\d+)?"
+        suffix_accessed = "[>|\)](LAST)?ACCESSED\d+"
+        suffix_sagepub = "[\.|\(|,|;]?[A-Z]*\.?SAGEPUB.*?"
+        suffix_dotted_line = "\.{5}.*?"
+        suffix_delimiters = "[\.|,|<|&|\(|;]+"
+        suffix_double_doi = "[\.|\(|,|;]10.\d{4}\/.*?"
+        suffix_doi_mark = "\[DOI\].*?"
+        suffix_year = "\(\d{4}\)?"
+        suffix_query = "\?.*?=.*?"
+        suffix_hash = "#.*?"
+        suffix_regex_lst = [suffix_dcsupplemental, suffix_suppinfo, suffix_pmid1, suffix_pmid2, suffix_epub,
+                            suffix_published_online, suffix_http, suffix_subcontent, suffix_accessed, suffix_sagepub,
+                            suffix_dotted_line, suffix_delimiters, suffix_double_doi, suffix_doi_mark, suffix_year,
+                            suffix_query, suffix_hash]
+        self.suffix_regex = "(.*?)(?:" + "|".join(suffix_regex_lst) + ")$"
 
     def check_dois_validity(self, data:list) -> list:
         checked_dois = list()
@@ -60,33 +62,36 @@ class Clean_DOIs(object):
         pbar = tqdm(total=len(data))
         for row in data:
             invalid_doi = row["Invalid_cited_DOI"]
-            new_doi, classes_of_errors = self.clean_doi(row["Invalid_cited_DOI"])
-            valid_dictionary = {
-                "Valid_citing_DOI": row["Valid_citing_DOI"], 
-                "Invalid_cited_DOI": row["Invalid_cited_DOI"],
-                "Valid_DOI": new_doi, 
-                "Already_valid": row["Already_valid"],
-                "Prefix_error": classes_of_errors["prefix"],
-                "Suffix_error": classes_of_errors["suffix"],
-                "Other-type_error": classes_of_errors["other-type"]
-            }
             invalid_dictionary = {
-                "Valid_citing_DOI": row["Valid_citing_DOI"], 
+                "Valid_citing_DOI": row["Valid_citing_DOI"],
                 "Invalid_cited_DOI": row["Invalid_cited_DOI"],
-                "Valid_DOI": "", 
+                "Valid_DOI": row["Valid_DOI"],
                 "Already_valid": row["Already_valid"],
-                "Prefix_error": classes_of_errors["prefix"],
-                "Suffix_error": classes_of_errors["suffix"],
-                "Other-type_error": classes_of_errors["other-type"]
+                "Prefix_error": 0,
+                "Suffix_error": 0,
+                "Other-type_error": 0
             }
-            if new_doi != row["Invalid_cited_DOI"]:
-                handle = Support().handle_request(url=f"https://doi.org/api/handles/{new_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
-                if handle is not None:
-                    output.append(valid_dictionary)
+            if row["Already_valid"] != 1:
+                new_doi, classes_of_errors = self.clean_doi(row["Invalid_cited_DOI"])
+                valid_dictionary = {
+                    "Valid_citing_DOI": row["Valid_citing_DOI"],
+                    "Invalid_cited_DOI": row["Invalid_cited_DOI"],
+                    "Valid_DOI": new_doi,
+                    "Already_valid": row["Already_valid"],
+                    "Prefix_error": classes_of_errors["prefix"],
+                    "Suffix_error": classes_of_errors["suffix"],
+                    "Other-type_error": classes_of_errors["other-type"]
+                }
+                if new_doi != row["Invalid_cited_DOI"]:
+                    handle = Support().handle_request(url=f"https://doi.org/api/handles/{new_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
+                    if handle is not None:
+                        output.append(valid_dictionary)
+                    else:
+                        output.append(invalid_dictionary)
                 else:
                     output.append(invalid_dictionary)
             else:
-                output.append(invalid_dictionary)                                    
+                output.append(invalid_dictionary)
             pbar.update(1)
         pbar.close()
         return output
@@ -102,7 +107,7 @@ class Clean_DOIs(object):
         if prefix_match:
             tmp_doi = prefix_match.group(1)
             classes_of_errors["prefix"] += 1
-        suffix_match = re.search("(.*?)(?:"+ "|".join(self.suffix_regex_list) + ")$", tmp_doi)
+        suffix_match = re.search(self.suffix_regex, tmp_doi)
         if suffix_match:
             tmp_doi = suffix_match.group(1)
             classes_of_errors["suffix"] += 1
