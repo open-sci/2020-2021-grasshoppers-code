@@ -1,0 +1,21 @@
+.form-control{
+    width: auto;
+    margin: 1rem 0 0 1rem;
+}
+
+.viz {
+    color: var(--gray-dark);
+}
+
+div.tooltip {
+	color: black;
+	position: absolute;
+	text-align: center;
+	padding: 10px;
+	font: 12px sans-serif;
+	background: whitesmoke;
+	border: 1px solid black;
+	border-radius: 8px;
+	pointer-events: none;
+	z-index: 1000;
+}
