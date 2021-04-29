@@ -30,7 +30,7 @@ class Clean_DOIs(object):
                             suffix_query, suffix_hash]
         self.suffix_regex = "(.*?)(?:" + "|".join(suffix_regex_lst) + ")$"
 
-    def check_dois_validity(self, data:list) -> list:
+    def check_dois_validity(self, data:list, crossref_dois:list) -> list:
         checked_dois = list()
         pbar = tqdm(total=len(data))
         for row in data:
@@ -40,13 +40,17 @@ class Clean_DOIs(object):
                 "Valid_DOI": "",
                 "Already_valid": 0
             }
-            handle = Support().handle_request(url=f"https://doi.org/api/handles/{row['Invalid_cited_DOI']}", cache_path=self.cache_path, error_log_dict=self.logs)
+            invalid_cited_doi = row['Invalid_cited_DOI']
+            if invalid_cited_doi in crossref_dois:
+                handle = {"responseCode": 1}
+            else:
+                handle = Support().handle_request(url=f"https://doi.org/api/handles/{invalid_cited_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
             if handle is not None:
                 if handle["responseCode"] == 1:
                     checked_dois.append(
                         {"Valid_citing_DOI": row["Valid_citing_DOI"],
                         "Invalid_cited_DOI": row["Invalid_cited_DOI"], 
-                        "Valid_DOI": row['Invalid_cited_DOI'],
+                        "Valid_DOI": invalid_cited_doi,
                         "Already_valid": 1
                         })
                 else:
@@ -57,12 +61,12 @@ class Clean_DOIs(object):
         pbar.close()
         return checked_dois
     
-    def procedure(self, data:list) -> list:
+    def procedure(self, data:list, crossref_dois:list) -> list:
         output = list()
         pbar = tqdm(total=len(data))
         for row in data:
             invalid_doi = row["Invalid_cited_DOI"]
-            invalid_dictionary = {
+            unclean_dictionary = {
                 "Valid_citing_DOI": row["Valid_citing_DOI"],
                 "Invalid_cited_DOI": row["Invalid_cited_DOI"],
                 "Valid_DOI": row["Valid_DOI"],
@@ -73,7 +77,7 @@ class Clean_DOIs(object):
             }
             if row["Already_valid"] != 1:
                 new_doi, classes_of_errors = self.clean_doi(row["Invalid_cited_DOI"])
-                valid_dictionary = {
+                clean_dictionary = {
                     "Valid_citing_DOI": row["Valid_citing_DOI"],
                     "Invalid_cited_DOI": row["Invalid_cited_DOI"],
                     "Valid_DOI": new_doi,
@@ -83,15 +87,21 @@ class Clean_DOIs(object):
                     "Other-type_error": classes_of_errors["other-type"]
                 }
                 if new_doi != row["Invalid_cited_DOI"]:
-                    handle = Support().handle_request(url=f"https://doi.org/api/handles/{new_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
-                    if handle is not None:
-                        output.append(valid_dictionary)
+                    if new_doi in crossref_dois:
+                        handle = {"responseCode": 1}
                     else:
-                        output.append(invalid_dictionary)
+                        handle = Support().handle_request(url=f"https://doi.org/api/handles/{new_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
+                    if handle is not None:
+                        if handle["responseCode"] == 1:
+                            output.append(clean_dictionary)
+                        else:
+                            output.append(unclean_dictionary)
+                    else:
+                        output.append(unclean_dictionary)
                 else:
-                    output.append(invalid_dictionary)
+                    output.append(unclean_dictionary)
             else:
-                output.append(invalid_dictionary)
+                output.append(unclean_dictionary)
             pbar.update(1)
         pbar.close()
         return output

@@ -23,10 +23,15 @@
             </div>
         </section>
         <section>
-            <div class="container" id="barChartContainer">
-                <div class="card bg-primary shadow-inset border-light p-5">
+            <div class="container">
+                <h2>Barplot</h2>
+                <div class="card bg-primary shadow-inset border-light p-5 mb-5" id="barChartContainer">
                     <div class="vizSelector" id="bcOrderSelector"></div>
                     <div class="viz" id="doiErrorsViz"></div>    
+                </div>
+                <h2>Treemap</h2>
+                <div class="card bg-primary shadow-inset border-light p-5" id="treemapContainer">
+                    <div class="viz" id="doiErrorsTreemap"></div>    
                 </div>
             </div>        
         </section>
@@ -34,12 +39,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js" integrity="sha512-cd6CHE+XWDQ33ElJqsi0MdNte3S+bQY819f7p3NUHgwQQLXSKjE4cPZTeGNI+vaxZynk1wVU3hoHmow3m089wA==" crossorigin="anonymous"></script>    
     <script>
-        var margin_bc = { left: 230, right: 50, top: 100, bottom: 10 }
+        var margin_bc = { left: 245, right: 50, top: 100, bottom: 10 }
         var width_bc = $("#barChartContainer").width() - margin_bc.left - margin_bc.right
         var height_bc = $(document).height() / 1.8 - margin_bc.top - margin_bc.bottom
 
         pretty_labels = {
-            "number_of_dois": "Number of DOIs",
+            "Invalid_DOI": "Number of invalid DOIs after cleaning",
             "Valid_DOI": "Number of valid DOIs after cleaning",
             "Already_valid": "Already valid DOIs",
             "Prefix_error": "Prefix errors",
@@ -101,8 +106,54 @@
                 .style("opacity", 0);
         }
 
+        var margin_tm = { left: 0, right: 0, top: 0, bottom: 0 }
+            width_tm = $("#treemapContainer").width() - margin_tm.left - margin_tm.right,
+            height_tm = $(document).height() / 1.8 - margin_tm.top - margin_tm.bottom;
+
+        var svg_tm = d3.select("#doiErrorsTreemap")
+            .append("svg")
+            .attr("width", width_tm + margin_tm.left + margin_tm.right)
+            .attr("height", height_tm + margin_tm.top + margin_tm.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin_tm.left + "," + margin_tm.top + ")");
+
+        let tmMouseOver = function (event, d) {
+            d3.selectAll("rect")
+                .transition()
+                .duration(200)
+                .style("opacity", .5)
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+            tip.transition()
+                .duration(200)
+                .style("opacity", .9)
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            tip.html(function () {
+                return `
+                <strong>Measure</strong>: ${pretty_labels[d.data.measure]}<br/>
+                <strong>Value</strong>: ${d.value}
+                `
+            })
+        }
+
+        let tmMouseLeave = function (event, d) {
+            d3.selectAll("rect")
+                .transition()
+                .duration(200)
+                .style("opacity", 1)
+            tip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        }
+
         d3.csv("https://raw.githubusercontent.com/open-sci/2020-2021-grasshoppers-code/main/output.csv").then(data => {
             data = prepare_data_to_viz(data);
+            data_to_bp = data.filter( el => el.measure !== "DOIs" ); 
+            ////////////// Barplot visualization
             document.addEventListener("DOMContentLoaded", doiBarchart());
             function doiBarchart() {
                 // Append SVG to this DIV
@@ -116,7 +167,7 @@
                     .attr("transform", "translate(" + margin_bc.left + ", " + margin_bc.top + ")");
 
                 var y = d3.scaleBand()
-                    .domain(data.map(d => {
+                    .domain(data_to_bp.map(d => {
                         return pretty_labels[d.measure]
                     }))
                     .range([0, height_bc])
@@ -124,13 +175,13 @@
 
                 var x = d3.scaleLinear()
                     .domain([0, 
-                        d3.max(data, d => {
+                        d3.max(data_to_bp, d => {
                             return +d.value
                         })
                     ])
                     .range([0, width_bc])
 
-                const color = d3.scaleOrdinal(d3.schemeCategory10);
+                color = d3.scaleOrdinal(d3.schemeCategory10);
 
                 var yAxisCall = d3.axisLeft(y);
                 g_doi.append("g")
@@ -151,7 +202,7 @@
 
                 //Bars
                 var rects = g_doi.selectAll(".rect")
-                    .data(data)
+                    .data(data_to_bp)
                     .enter()
                     .append("rect")
                     .attr("x", x(0))
@@ -183,12 +234,56 @@
             d3.select("#bcSelection").on("change", function () {
                 const selectedOption = d3.select(this).node().value;
                 if (selectedOption == "Ascendingly") {
-                    data.sort((a, b) => d3.ascending(+a.value, +b.value))
+                    data_to_bp.sort((a, b) => d3.ascending(+a.value, +b.value))
                 } else if (selectedOption == "Descendingly") {
-                    data.sort((a, b) => d3.descending(+a.value, +b.value))
+                    data_to_bp.sort((a, b) => d3.descending(+a.value, +b.value))
                 }
                 doiBarchart();
             });
+
+            ////////////// Treemap visualization
+            var root = d3.stratify()
+                .id(function (d) {return d.measure })   
+                .parentId(function (d) {return d.parent })   
+                (data);
+            root.sum(function (d) { return +d.value })   
+
+            d3.treemap()
+                .size([width_tm, height_tm])
+                .padding(4)
+                (root)
+
+            svg_tm
+                .selectAll("rect")
+                .data(root.leaves())
+                .enter()
+                .append("rect")
+                .attr('x', function (d) { return d.x0; })
+                .attr('y', function (d) { return d.y0; })
+                .attr('width', function (d) { return d.x1 - d.x0; })
+                .attr('height', function (d) { return d.y1 - d.y0; })
+                .style("stroke", "black")
+                .style("fill", function(d){ 
+                    console.log(d)
+                    return color(d.data.value) 
+                });
+
+            svg_tm
+                .selectAll("text")
+                .data(root.leaves())
+                .enter()
+                .append("text")
+                .attr("x", function (d) { return d.x0 + 10 })    // +10 to adjust position (more right)
+                .attr("y", function (d) { return d.y0 + 30 })    // +20 to adjust position (lower)
+                .text(function (d) { return pretty_labels[d.data.measure] })
+                .attr("font-size", "20px")
+                .attr("font-weight", "bold")
+                .attr("fill", "black")
+            
+            svg_tm
+                .selectAll("rect")
+                .on("mouseover", tmMouseOver)
+                .on("mouseout", tmMouseLeave)
         }).catch(error => {
             console.log(error);
         });
@@ -196,27 +291,38 @@
         function prepare_data_to_viz(d) {
                 count_data = [
                     {
-                        "measure": "number_of_dois",
+                        "measure": "DOIs",
+                        "parent": "",
+                        "value": 0
+                    },
+                    {
+                        "measure": "Invalid_DOI",
+                        "parent": "DOIs",
                         "value": d.length
                     },
                     {
                         "measure": "Valid_DOI",
+                        "parent": "DOIs",
                         "value": 0
                     },
                     {
                         "measure": "Already_valid",
+                        "parent": "DOIs",
                         "value": 0
                     },
                     {
                         "measure": "Prefix_error",
+                        "parent": "DOIs",
                         "value": 0
                     },
                     {
                         "measure": "Suffix_error",
+                        "parent": "DOIs",
                         "value": 0
                     },
                     {
                         "measure": "Other-type_error",
+                        "parent": "DOIs",
                         "value": 0
                     }
                 ]
@@ -226,6 +332,8 @@
                             count_data.forEach(obj => {
                                 if (obj.measure == k){
                                     obj.value += 1
+                                } else if (obj.measure == "Invalid_DOI"){
+                                    obj.value -= 1
                                 }
                             })
                         } else if (k == "Already_valid" || k == "Prefix_error" || k == "Suffix_error" || k== "Other-type_error"){
