@@ -23,5 +23,8 @@
 
 ## Reference
 
-
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names. Zenodo. https://doi.org/10.5281/zenodo.4723934
+- Ricarda Boente, Deniz Tural, Cristian Santini, Arcangelo Massari 2021. Protocol: "Investigating DOIs classes of errors" V.2. protocols.io https://dx.doi.org/10.17504/protocols.io.bufwntpe
+Version created by Cristian Santini
+- Massari, Arcangelo, Santini, Cristian, Boente, Ricarda & Tural, Deniz. (2021, April 27). open-sci/2020-2021-grasshoppers-code: open-sci/2020-2021-grasshoppers-code: Release 1.0.0-alpha (Version v1.0.0-alpha). Zenodo. http://doi.org/10.5281/zenodo.4723984
 
