@@ -1,3 +1,15 @@
+<!-- ISC License (ISC)
+Copyright 2021 Arcangelo Massari
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, 
+provided that the above copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL 
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, 
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, 
+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE 
+OR PERFORMANCE OF THIS SOFTWARE. -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,11 +42,28 @@
                     <div class="viz" id="doiErrorsViz"></div>    
                 </div>
                 <h2>Treemap</h2>
-                <div class="card bg-primary shadow-inset border-light p-5" id="treemapContainer">
+                <div class="card bg-primary shadow-inset border-light p-5 mb-5" id="treemapContainer">
                     <div class="viz" id="doiErrorsTreemap"></div>    
                 </div>
             </div>        
         </section>
+        <footer class="d-flex pb-5 pt-6 pt-md-7 border-top border-light bg-primary">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <a href="https://www.unibo.it/en/teaching/course-unit-catalogue/course-unit/2020/443753" target="_blank" class="d-flex justify-content-center">Open Science (A.Y. 2020/2021)</a>
+                        <a href="https://corsi.unibo.it/2cycle/DigitalHumanitiesKnowledge" target="_blank" class="d-flex justify-content-center">
+                            Second Cycle Degree in Digital Humanities and Digital Knowledge
+                            Alma Mater Studiorum - Università di Bologna
+                        </a>                        
+                        <div class="d-flex text-center justify-content-center align-items-center mt-5" role="contentinfo">
+                            <p class="font-weight-normal font-small mb-0">Copyright © Arcangelo Massari
+                            <span class="current-year">2021</span>. <a href="https://opensource.org/licenses/ISC" target="_blank">ISC Licence</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js" integrity="sha512-cd6CHE+XWDQ33ElJqsi0MdNte3S+bQY819f7p3NUHgwQQLXSKjE4cPZTeGNI+vaxZynk1wVU3hoHmow3m089wA==" crossorigin="anonymous"></script>    
@@ -190,6 +219,7 @@
                     .call(yAxisCall)
                     .selectAll("text")
                     .attr("text-anchor", "end")
+                    // .call(wrap, margin_bc.left)
 
                 var xAxisCall = d3.axisTop(x)
                     .tickFormat(d => {
@@ -263,10 +293,7 @@
                 .attr('width', function (d) { return d.x1 - d.x0; })
                 .attr('height', function (d) { return d.y1 - d.y0; })
                 .style("stroke", "black")
-                .style("fill", function(d){ 
-                    console.log(d)
-                    return color(d.data.value) 
-                });
+                .style("fill", function(d){ return color(d.data.value) });
 
             svg_tm
                 .selectAll("text")
@@ -279,6 +306,17 @@
                 .attr("font-size", "20px")
                 .attr("font-weight", "bold")
                 .attr("fill", "black")
+                .call(wrap, 300)
+                .style('opacity', function(d){
+                    dx = d.x1 - d.x0
+                    dy = d.y1 - d.y0
+                    console.log(dx, dy)
+                    if ( dx <= 150 || dy <= 100 ) {
+                        return 0
+                    };
+                    return 1;
+                });
+
             
             svg_tm
                 .selectAll("rect")
@@ -345,9 +383,42 @@
                         }
                     });
                 });
-                count_data.sort(function(a, b){return b.value - a.value})
-                return count_data;
-            }
+            count_data.sort(function(a, b){return b.value - a.value})
+            return count_data;
+        }
+
+        function wrap(text, width) {
+            text.each(function () {
+                var text = d3.select(this),
+                    words = text.text().split(/\s+/).reverse(),
+                    word,
+                    line = [],
+                    lineNumber = 0,
+                    lineHeight = 1.1, // ems
+                    x = text.attr("x"),
+                    y = text.attr("y"),
+                    dy = 0, //parseFloat(text.attr("dy")),
+                    tspan = text.text(null)
+                        .append("tspan")
+                        .attr("x", x)
+                        .attr("y", y)
+                        .attr("dy", dy + "em");
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                            .text(word);
+                    }
+                }
+        });
+}
     </script>
 </body>
 
