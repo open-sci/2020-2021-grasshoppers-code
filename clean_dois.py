@@ -3,7 +3,11 @@ from tqdm import tqdm
 from support import Support
 
 class Clean_DOIs(object):
-    def __init__(self, cache_path:str="", logs:dict={}):
+    def __init__(self, crossref_dois:list=list(), cache_path:str="", logs:dict={}):
+        self.crossref_dois = crossref_dois
+        if len(self.crossref_dois) > 0:
+            print("[Clean_DOIs: INFO] Storing Crossref DOIs in a set")
+            self.crossref_dois = {item["crossref_doi"] for item in crossref_dois}
         self.cache_path = cache_path
         self.logs = logs
         self.prefix_regex = "(.*?)(?:\.)?(?:HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/|HTTPS:\/\/D[0|O]I\.[0|O]RG\/)(.*)"
@@ -30,19 +34,17 @@ class Clean_DOIs(object):
                             suffix_query, suffix_hash]
         self.suffix_regex = "(.*?)(?:" + "|".join(suffix_regex_lst) + ")$"
 
-    def check_dois_validity(self, data:list, crossref_dois:list) -> list:
+    def check_dois_validity(self, data:list) -> list:
         checked_dois = list()
         pbar = tqdm(total=len(data))
         for row in data:
             invalid_dictionary = {
                 "Valid_citing_DOI": row["Valid_citing_DOI"],
-                "Invalid_cited_DOI": row["Invalid_cited_DOI"], 
+                "Invalid_cited_DOI": row['Invalid_cited_DOI'], 
                 "Valid_DOI": "",
                 "Already_valid": 0
             }
-            invalid_cited_doi = row['Invalid_cited_DOI']
-            if invalid_cited_doi in crossref_dois:
-                print("ehi")
+            if invalid_cited_doi in self.crossref_dois:
                 handle = {"responseCode": 1}
             else:
                 handle = Support().handle_request(url=f"https://doi.org/api/handles/{invalid_cited_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
@@ -62,11 +64,10 @@ class Clean_DOIs(object):
         pbar.close()
         return checked_dois
     
-    def procedure(self, data:list, crossref_dois:list) -> list:
+    def procedure(self, data:list) -> list:
         output = list()
         pbar = tqdm(total=len(data))
         for row in data:
-            invalid_doi = row["Invalid_cited_DOI"]
             unclean_dictionary = {
                 "Valid_citing_DOI": row["Valid_citing_DOI"],
                 "Invalid_cited_DOI": row["Invalid_cited_DOI"],
@@ -88,8 +89,7 @@ class Clean_DOIs(object):
                     "Other-type_error": classes_of_errors["other-type"]
                 }
                 if new_doi != row["Invalid_cited_DOI"]:
-                    if new_doi in crossref_dois:
-                        print("ehi")
+                    if new_doi in self.crossref_dois:
                         handle = {"responseCode": 1}
                     else:
                         handle = Support().handle_request(url=f"https://doi.org/api/handles/{new_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
