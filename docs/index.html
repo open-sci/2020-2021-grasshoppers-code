@@ -34,20 +34,22 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 </div>
             </div>
         </section>
-        <section>
+        <section class="text-justify">
             <div class="container">
                 <h2>Barplot</h2>
+                <p>The barplot helps to compare the values through the difference in length of the associated bars. The values considered were the number of DOIs still invalid after the algorithm was run, the number of valid ones and the number of DOIs associated with each considered error class, i.e. DOIs already valid or containing prefix, suffix and other-type errors.</p>
                 <div class="card bg-primary shadow-inset border-light p-5 mb-5" id="barChartContainer">
                     <div class="vizSelector" id="bcOrderSelector"></div>
                     <div class="viz" id="doiErrorsViz"></div>    
                 </div>
                 <h2>Treemap</h2>
+                <p>The treemap helps to read the data from a <strong>hierarchical point of view</strong> and to compare the values through area differences. In this case, the root is made up of the set of all DOIs, which inside includes the DOIs still invalid after the algorithm has been run and those that have been corrected. This last category can be further subdivided into DOIs that are valid because they were already valid or because they contained prefix, suffix or other-type errors that have been corrected.</p>
                 <div class="card bg-primary shadow-inset border-light p-5 mb-5" id="treemapContainer">
                     <div class="viz" id="doiErrorsTreemap"></div>    
                 </div>
             </div>        
         </section>
-        <footer class="d-flex pb-5 pt-6 pt-md-7 border-top border-light bg-primary">
+        <footer class="d-flex pb-5 pt-6 pt-md-7 border-top border-light bg-primary text-center">
             <div class="container">
                 <div class="row">
                     <div class="col">
@@ -76,9 +78,9 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             "Invalid_DOI": "Number of invalid DOIs after cleaning",
             "Valid_DOI": "Number of valid DOIs after cleaning",
             "Already_valid": "Already valid DOIs",
-            "Prefix_error": "Prefix errors",
-            "Suffix_error": "Suffix errors",
-            "Other-type_error": "Other-type errors"
+            "Prefix_error": "Prefix errors fixed",
+            "Suffix_error": "Suffix errors fixed",
+            "Other-type_error": "Other-type errors fixed"
         }
 
         // Create a select dropdown
@@ -276,7 +278,12 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .id(function (d) {return d.measure })   
                 .parentId(function (d) {return d.parent })   
                 (data);
-            root.sum(function (d) { return +d.value })   
+            root
+                .sum(function(d){
+                    if (d.parent == "Valid_DOI" || d.measure == "Invalid_DOI"){
+                        return +d.value
+                    }
+                });   
 
             d3.treemap()
                 .size([width_tm, height_tm])
@@ -306,11 +313,10 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .attr("font-size", "20px")
                 .attr("font-weight", "bold")
                 .attr("fill", "black")
-                .call(wrap, 300)
+                .call(wrap, 150)
                 .style('opacity', function(d){
                     dx = d.x1 - d.x0
                     dy = d.y1 - d.y0
-                    console.log(dx, dy)
                     if ( dx <= 150 || dy <= 100 ) {
                         return 0
                     };
@@ -331,7 +337,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     {
                         "measure": "DOIs",
                         "parent": "",
-                        "value": 0
+                        "value": NaN
                     },
                     {
                         "measure": "Invalid_DOI",
@@ -345,22 +351,22 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     },
                     {
                         "measure": "Already_valid",
-                        "parent": "DOIs",
+                        "parent": "Valid_DOI",
                         "value": 0
                     },
                     {
                         "measure": "Prefix_error",
-                        "parent": "DOIs",
+                        "parent": "Valid_DOI",
                         "value": 0
                     },
                     {
                         "measure": "Suffix_error",
-                        "parent": "DOIs",
+                        "parent": "Valid_DOI",
                         "value": 0
                     },
                     {
                         "measure": "Other-type_error",
-                        "parent": "DOIs",
+                        "parent": "Valid_DOI",
                         "value": 0
                     }
                 ]

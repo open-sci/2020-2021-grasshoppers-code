@@ -42,6 +42,7 @@ class Clean_DOIs(object):
             }
             invalid_cited_doi = row['Invalid_cited_DOI']
             if invalid_cited_doi in crossref_dois:
+                print("ehi")
                 handle = {"responseCode": 1}
             else:
                 handle = Support().handle_request(url=f"https://doi.org/api/handles/{invalid_cited_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
@@ -88,6 +89,7 @@ class Clean_DOIs(object):
                 }
                 if new_doi != row["Invalid_cited_DOI"]:
                     if new_doi in crossref_dois:
+                        print("ehi")
                         handle = {"responseCode": 1}
                     else:
                         handle = Support().handle_request(url=f"https://doi.org/api/handles/{new_doi}", cache_path=self.cache_path, error_log_dict=self.logs)
