@@ -181,7 +181,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .style("opacity", 0);
         }
 
-        d3.csv("../output.csv").then(data => {
+        d3.csv("./output.csv").then(data => {
             data = prepare_data_to_viz(data);
             data_to_bp = data.filter( el => el.measure !== "DOIs" ); 
             ////////////// Barplot visualization
