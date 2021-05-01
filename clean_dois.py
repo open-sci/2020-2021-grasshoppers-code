@@ -38,9 +38,11 @@ class Clean_DOIs(object):
         checked_dois = list()
         pbar = tqdm(total=len(data))
         for row in data:
+            valid_citing_doi = row["Valid_citing_DOI"]
+            invalid_cited_doi = row["Invalid_cited_DOI"]
             invalid_dictionary = {
-                "Valid_citing_DOI": row["Valid_citing_DOI"],
-                "Invalid_cited_DOI": row['Invalid_cited_DOI'], 
+                "Valid_citing_DOI": valid_citing_doi,
+                "Invalid_cited_DOI": invalid_cited_doi, 
                 "Valid_DOI": "",
                 "Already_valid": 0
             }
@@ -51,8 +53,8 @@ class Clean_DOIs(object):
             if handle is not None:
                 if handle["responseCode"] == 1:
                     checked_dois.append(
-                        {"Valid_citing_DOI": row["Valid_citing_DOI"],
-                        "Invalid_cited_DOI": row["Invalid_cited_DOI"], 
+                        {"Valid_citing_DOI": valid_citing_doi,
+                        "Invalid_cited_DOI": invalid_cited_doi, 
                         "Valid_DOI": invalid_cited_doi,
                         "Already_valid": 1
                         })
@@ -68,9 +70,11 @@ class Clean_DOIs(object):
         output = list()
         pbar = tqdm(total=len(data))
         for row in data:
+            valid_citing_doi = row["Valid_citing_DOI"]
+            invalid_cited_doi = row["Invalid_cited_DOI"]
             unclean_dictionary = {
-                "Valid_citing_DOI": row["Valid_citing_DOI"],
-                "Invalid_cited_DOI": row["Invalid_cited_DOI"],
+                "Valid_citing_DOI": valid_citing_doi,
+                "Invalid_cited_DOI": invalid_cited_doi,
                 "Valid_DOI": row["Valid_DOI"],
                 "Already_valid": row["Already_valid"],
                 "Prefix_error": 0,
@@ -78,17 +82,17 @@ class Clean_DOIs(object):
                 "Other-type_error": 0
             }
             if row["Already_valid"] != 1:
-                new_doi, classes_of_errors = self.clean_doi(row["Invalid_cited_DOI"])
+                new_doi, classes_of_errors = self.clean_doi(invalid_cited_doi)
                 clean_dictionary = {
-                    "Valid_citing_DOI": row["Valid_citing_DOI"],
-                    "Invalid_cited_DOI": row["Invalid_cited_DOI"],
+                    "Valid_citing_DOI": valid_citing_doi,
+                    "Invalid_cited_DOI": invalid_cited_doi,
                     "Valid_DOI": new_doi,
                     "Already_valid": row["Already_valid"],
                     "Prefix_error": classes_of_errors["prefix"],
                     "Suffix_error": classes_of_errors["suffix"],
                     "Other-type_error": classes_of_errors["other-type"]
                 }
-                if new_doi != row["Invalid_cited_DOI"]:
+                if new_doi != invalid_cited_doi:
                     if new_doi in self.crossref_dois:
                         handle = {"responseCode": 1}
                     else:
