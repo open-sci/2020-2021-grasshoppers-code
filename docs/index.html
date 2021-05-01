@@ -83,6 +83,8 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             "Other-type_error": "Other-type errors fixed"
         }
 
+        var thousandsFormatter = d3.format(",.2r")
+
         // Create a select dropdown
         const bcOrderSelector = document.getElementById("bcOrderSelector");
         const leSelectItems = ["Descendingly", "Ascendingly"];
@@ -122,7 +124,8 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             tip.html(function () {
                 return `
                 <strong>Measure</strong>: ${pretty_labels[d.measure]}<br/>
-                <strong>Value</strong>: ${d.value}
+                <strong>Value</strong>: ${thousandsFormatter(d.value)}<br/>
+                <strong>Percentage</strong>: ${thousandsFormatter(d.value)} / ${thousandsFormatter(total)} (${(d.value/total*100).toFixed(1)}%)
                 `
             })
         }
@@ -166,7 +169,9 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             tip.html(function () {
                 return `
                 <strong>Measure</strong>: ${pretty_labels[d.data.measure]}<br/>
-                <strong>Value</strong>: ${d.value}
+                <strong>Value</strong>: ${thousandsFormatter(d.value)}<br/>
+                <strong>Percentage</strong>: ${thousandsFormatter(d.value)} / ${thousandsFormatter(total)} (${(d.value/total*100).toFixed(1)}%)
+
                 `
             })
         }
@@ -183,6 +188,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
 
         d3.csv("./output.csv").then(data => {
             data = prepare_data_to_viz(data);
+            total = data[0]["value"]
             data_to_bp = data.filter( el => el.measure !== "DOIs" ); 
             ////////////// Barplot visualization
             document.addEventListener("DOMContentLoaded", doiBarchart());
@@ -225,7 +231,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
 
                 var xAxisCall = d3.axisTop(x)
                     .tickFormat(d => {
-                        return d
+                        return thousandsFormatter(d)
                     });
                 g_doi.append("g")
                     .attr("class", "x-axis")
@@ -337,7 +343,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     {
                         "measure": "DOIs",
                         "parent": "",
-                        "value": NaN
+                        "value": d.length
                     },
                     {
                         "measure": "Invalid_DOI",
