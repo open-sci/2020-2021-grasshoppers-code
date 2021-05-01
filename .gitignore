@@ -5,4 +5,4 @@
 *.sqlite
 .vscode/
 /dataset/crossref
-crossref_dois.csv
+/dataset/crossref_dois.csv

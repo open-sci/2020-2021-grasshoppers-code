@@ -77,7 +77,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
         pretty_labels = {
             "Invalid_DOI": "Number of invalid DOIs after cleaning",
             "Valid_DOI": "Number of valid DOIs after cleaning",
-            "Already_valid": "Already valid DOIs",
+            "Already_valid": "DOIs temporarily invalid now valid",
             "Prefix_error": "Prefix errors fixed",
             "Suffix_error": "Suffix errors fixed",
             "Other-type_error": "Other-type errors fixed"
@@ -181,7 +181,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .style("opacity", 0);
         }
 
-        d3.csv("https://raw.githubusercontent.com/open-sci/2020-2021-grasshoppers-code/main/output.csv").then(data => {
+        d3.csv("../output.csv").then(data => {
             data = prepare_data_to_viz(data);
             data_to_bp = data.filter( el => el.measure !== "DOIs" ); 
             ////////////// Barplot visualization

@@ -2,3 +2,4 @@ regex
 requests
 requests_cache
 tqdm
+ijson
