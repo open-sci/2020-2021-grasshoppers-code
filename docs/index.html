@@ -87,7 +87,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             "Other-type_error": "Other-type errors fixed"
         }
 
-        var thousandsFormatter = d3.format(",.2r")
+        var thousandsFormatter = d3.format(",")
 
         // Create a select dropdown
         const bcOrderSelector = document.getElementById("bcOrderSelector");
@@ -327,7 +327,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .style('opacity', function(d){
                     dx = d.x1 - d.x0
                     dy = d.y1 - d.y0
-                    if ( dx <= 150 || dy <= 100 ) {
+                    if ( dx <= 150 || dy <= 70 ) {
                         return 0
                     };
                     return 1;
