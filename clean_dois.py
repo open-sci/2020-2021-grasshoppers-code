@@ -1,4 +1,6 @@
 import re
+from collections import defaultdict
+from itertools import product
 from tqdm import tqdm
 from support import Support
 
@@ -10,7 +12,8 @@ class Clean_DOIs(object):
             self.crossref_dois = {item["crossref_doi"] for item in crossref_dois}
         self.cache_path = cache_path
         self.logs = logs
-        self.prefix_regex = "(.*?)(?:\.)?(?:HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/|HTTPS:\/\/D[0|O]I\.[0|O]RG\/)(.*)"
+        prefix_dx = "HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/"
+        prefix_doi = "HTTPS:\/\/D[0|O]I\.[0|O]RG\/"
         suffix_dcsupplemental = "\/-\/DCSUPPLEMENTAL"
         suffix_suppinfo = "SUPPINF[0|O](\.)?"
         suffix_pmid1 = "[\.|\(|,|;]?PMID:\d+.*?"
@@ -28,11 +31,13 @@ class Clean_DOIs(object):
         suffix_year = "\(\d{4}\)?"
         suffix_query = "\?.*?=.*?"
         suffix_hash = "#.*?"
-        suffix_regex_lst = [suffix_dcsupplemental, suffix_suppinfo, suffix_pmid1, suffix_pmid2, suffix_epub,
+        self.suffix_regex_lst = [suffix_dcsupplemental, suffix_suppinfo, suffix_pmid1, suffix_pmid2, suffix_epub,
                             suffix_published_online, suffix_http, suffix_subcontent, suffix_accessed, suffix_sagepub,
                             suffix_dotted_line, suffix_delimiters, suffix_double_doi, suffix_doi_mark, suffix_year,
                             suffix_query, suffix_hash]
-        self.suffix_regex = "(.*?)(?:" + "|".join(suffix_regex_lst) + ")$"
+        self.prefix_regex_lst = [prefix_dx, prefix_doi]
+        self.prefix_regex = "(.*?)(?:\.)?(?:" + "|".join(self.prefix_regex_lst) + ")(.*)"
+        self.suffix_regex = "(.*?)(?:" + "|".join(self.suffix_regex_lst) + ")$"
 
     def check_dois_validity(self, data:list) -> list:
         checked_dois = list()
@@ -135,6 +140,35 @@ class Clean_DOIs(object):
         if new_doi != tmp_doi:
             classes_of_errors["other-type"] += 1
         return new_doi, classes_of_errors
+    
+    def get_number_of_matches(self, data:list) -> dict:
+        classes_of_errors = {
+            "other-type": {
+                "\\\\": 0,
+                "__": 0,
+                "\\.\\.": 0,
+                "<.*?>.*?</.*?>": 0,
+                "<.*?/>": 0
+            }
+        }
+        for regex in self.prefix_regex_lst:
+            classes_of_errors.setdefault("prefix", dict())
+            classes_of_errors["prefix"].setdefault(regex, 0)
+        for regex in self.suffix_regex_lst:
+            classes_of_errors.setdefault("suffix", dict())
+            classes_of_errors["suffix"].setdefault(regex, 0)
+        pbar = tqdm(total=3)
+        for category in classes_of_errors:
+            print(f"[Clean_DOIs:INFO] Checking matches for class {category}")
+            for regex in classes_of_errors[category]:
+                for row in data:
+                    doi = row["Invalid_cited_DOI"].upper()
+                    match = re.search(regex, doi)
+                    if match:
+                        classes_of_errors[category][regex] += 1
+            pbar.update(1)
+        pbar.close()
+        return classes_of_errors
 
 
 

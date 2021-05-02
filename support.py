@@ -58,21 +58,6 @@ class Support(object):
         except Exception as e:
             error_log_dict[url] = str(e)
     
-    # @staticmethod
-    # def get_all_crossref_dois(folder_path:str="./dataset/crossref/"):
-    #     json_files = [pos_json for pos_json in os.listdir(folder_path) if pos_json.endswith('.json')][:20000]
-    #     dois = list()
-    #     pbar = tqdm(total=len(json_files))
-    #     for json_file in json_files:
-    #         with open(os.path.join(folder_path, json_file)) as json_file:
-    #             json_text = json.load(json_file)
-    #             for item in json_text["items"]:
-    #                 doi = item["DOI"]
-    #                 dois.append({"crossref_doi": doi})
-    #         pbar.update(1)
-    #     pbar.close()
-    #     return dois
-
     @staticmethod
     def get_all_crossref_dois(folder_path:str="./dataset/crossref/"):
         json_files = [pos_json for pos_json in os.listdir(folder_path) if pos_json.endswith('.json')]
@@ -87,14 +72,4 @@ class Support(object):
             pbar.update(1)
         pbar.close()
         return dois
-    
-    # @staticmethod
-    # def get_set_from_list_of_dictionaries(list_item:list, fields:set) -> set:
-    #     print(f"[Support: INFO] Getting the set from the dictionaries list")
-    #     output_set = set()
-    #     for field in fields:
-    #         output_set.update({item[field] for item in list_item})
-    #     return output_set
-
-# crossref_dois = Support.get_all_crossref_dois()
-# Support.dump_csv(data=crossref_dois, path="./dataset/crossref_dois.csv")
+            
