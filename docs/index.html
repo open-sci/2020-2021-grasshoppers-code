@@ -42,13 +42,13 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             <div class="container">
                 <h2>Barplot</h2>
                 <p>The barplot helps to compare the values through the difference in length of the associated bars. The values considered were the number of DOIs still invalid after the algorithm was run, the number of valid ones and the number of DOIs associated with each considered error class, i.e. DOIs already valid or containing prefix, suffix and other-type errors.</p>
-                <div class="card bg-primary shadow-inset border-light p-5 mb-5" id="barChartContainer">
+                <div class="card bg-primary shadow-inset border-light p-4 mb-5" id="barChartContainer">
                     <div class="vizSelector" id="bcOrderSelector"></div>
                     <div class="viz" id="doiErrorsViz"></div>    
                 </div>
                 <h2>Treemap</h2>
                 <p>The treemap helps to read the data from a <strong>hierarchical point of view</strong> and to compare the values through area differences. In this case, the root is made up of the set of all DOIs, which inside includes the DOIs still invalid after the algorithm has been run and those that have been corrected. This last category can be further subdivided into DOIs that are valid because they were already valid or because they contained prefix, suffix or other-type errors that have been corrected.</p>
-                <div class="card bg-primary shadow-inset border-light p-5 mb-5" id="treemapContainer">
+                <div class="card bg-primary shadow-inset border-light p-4 mb-5" id="treemapContainer">
                     <div class="viz" id="doiErrorsTreemap"></div>    
                 </div>
             </div>        
@@ -74,7 +74,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js" integrity="sha512-cd6CHE+XWDQ33ElJqsi0MdNte3S+bQY819f7p3NUHgwQQLXSKjE4cPZTeGNI+vaxZynk1wVU3hoHmow3m089wA==" crossorigin="anonymous"></script>    
     <script>
-        var margin_bc = { left: 245, right: 50, top: 100, bottom: 10 }
+        var margin_bc = { left: 245, right: 65, top: 100, bottom: 10 }
         var width_bc = $("#barChartContainer").width() - margin_bc.left - margin_bc.right
         var height_bc = $(document).height() / 1.8 - margin_bc.top - margin_bc.bottom
 
@@ -234,8 +234,12 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     // .call(wrap, margin_bc.left)
 
                 var xAxisCall = d3.axisTop(x)
-                    .tickFormat(d => {
-                        return thousandsFormatter(d)
+                    .tickFormat((d, i) => {
+                        if (i == 0) {
+                            return thousandsFormatter(d) + " DOIs"
+                        } else {
+                            return thousandsFormatter(d)
+                        }
                     });
                 g_doi.append("g")
                     .attr("class", "x-axis")
@@ -263,6 +267,20 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     .attr("width", function (d) {
                         return x(d.value);
                     });
+
+                g_doi.selectAll(".text").
+                    data(data_to_bp).
+                    enter().
+                    append("svg:text").
+                    attr("x", function(datum) { return x(datum.value) + 35 }).
+                    attr("y", function(datum) { return y(pretty_labels[datum.measure]) + y.bandwidth() / 2; }).
+                    attr("text-anchor", "middle").
+                    text(function(datum) { return thousandsFormatter(datum.value);}).
+                    attr("fill", "black");
+
+                g_doi.append("text")
+                    .attr("transform", "translate(" + (width_bc / 2) + " ," + (height_bc + margin_bc.bottom) + ")")
+                    .style("text-anchor", "end")
 
                 // This code will redraw charts based on dropdown selection. 
                 const showdoiBarchart = document.getElementById("doiErrorsViz");

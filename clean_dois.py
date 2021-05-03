@@ -26,14 +26,13 @@ class Clean_DOIs(object):
         suffix_sagepub = "[\.|\(|,|;]?[A-Z]*\.?SAGEPUB.*?"
         suffix_dotted_line = "\.{5}.*?"
         suffix_delimiters = "[\.|,|<|&|\(|;]+"
-        suffix_double_doi = "[\.|\(|,|;]10.\d{4}\/.*?"
         suffix_doi_mark = "\[DOI\].*?"
         suffix_year = "\(\d{4}\)?"
         suffix_query = "\?.*?=.*?"
         suffix_hash = "#.*?"
         self.suffix_regex_lst = [suffix_dcsupplemental, suffix_suppinfo, suffix_pmid1, suffix_pmid2, suffix_epub,
                             suffix_published_online, suffix_http, suffix_subcontent, suffix_accessed, suffix_sagepub,
-                            suffix_dotted_line, suffix_delimiters, suffix_double_doi, suffix_doi_mark, suffix_year,
+                            suffix_dotted_line, suffix_delimiters, suffix_doi_mark, suffix_year,
                             suffix_query, suffix_hash]
         self.prefix_regex_lst = [prefix_dx, prefix_doi]
         self.prefix_regex = "(.*?)(?:\.)?(?:" + "|".join(self.prefix_regex_lst) + ")(.*)"
