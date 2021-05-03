@@ -84,7 +84,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
             "Already_valid": "DOIs temporarily invalid now valid",
             "Prefix_error": "Prefix errors fixed",
             "Suffix_error": "Suffix errors fixed",
-            "Other-type_error": "Other-type errors fixed"
+            "Other-type_error": "Other type errors fixed"
         }
 
         var thousandsFormatter = d3.format(",")
@@ -276,7 +276,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     attr("y", function(datum) { return y(pretty_labels[datum.measure]) + y.bandwidth() / 2; }).
                     attr("text-anchor", "middle").
                     text(function(datum) { return thousandsFormatter(datum.value);}).
-                    attr("fill", "black");
+                    attr("fill", "#262833");
 
                 g_doi.append("text")
                     .attr("transform", "translate(" + (width_bc / 2) + " ," + (height_bc + margin_bc.bottom) + ")")
@@ -340,7 +340,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .text(function (d) { return pretty_labels[d.data.measure] })
                 .attr("font-size", "20px")
                 .attr("font-weight", "bold")
-                .attr("fill", "black")
+                .attr("fill", "#262833")
                 .call(wrap, 150)
                 .style('opacity', function(d){
                     dx = d.x1 - d.x0
