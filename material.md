@@ -43,9 +43,10 @@ Authors' response to the reviews:
 Boente, Ricarda, Tural, Deniz, Massari, Arcangelo, & Santini, Cristian. (2021, April 27). Response Letter to the reviewers of "Investigating DOIs' Classes of Errors". Zenodo. http://doi.org/10.5281/zenodo.4724007
 
 ### Software developed
-Massari, Arcangelo, Santini, Cristian, Boente, Ricarda & Tural, Deniz. (2021, April 27). open-sci/2020-2021-grasshoppers-code: open-sci/2020-2021-grasshoppers-code: Release 1.0.0-alpha (Version v1.0.0-alpha). Zenodo. http://doi.org/10.5281/zenodo.4723984
+Massari, Arcangelo, Santini, Cristian, & Boente, Ricarda. (2021, May 3). open-sci/2020-2021-grasshoppers-code: Classes of errors in DOI names (Version v1.0.0). Zenodo. http://doi.org/10.5281/zenodo.4734013
 
 ### The data gathered while running the methodology
+Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names: output dataset (Version v1.0.0-alpha) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4733647
 
 ### Article presenting the research
 
