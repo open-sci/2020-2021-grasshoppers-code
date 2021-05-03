@@ -23,7 +23,7 @@
 ## Material
 
 ### Data Management Plan
-Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names. Zenodo. https://doi.org/10.5281/zenodo.4723934
+Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names (Data Management Plan) (Version 4). Zenodo. https://doi.org/10.5281/zenodo.4733920
 
 Reviews of the DMP [Classes of errors in DOI names](https://zenodo.org/record/4665853#.YI6CzLUzaUk):
 * Sara Coppini. (2021). Review of: "Classes of errors in DOI names". Qeios. https://doi.org/10.32388/3V7ITH
