@@ -33,7 +33,7 @@ Authors' response to the reviews:
 Deniz Tural, Ricarda Boente, Cristian Santini, & Arcangelo Massari. (2021, April 27). Response letter to the reviewers of "Classes of errors in DOI names (Data Management Plan)". Zenodo. http://doi.org/10.5281/zenodo.4723674
 
 ### Protocol introducing the methodology
-Ricarda Boente, Deniz Tural, Cristian Santini, Arcangelo Massari 2021. Protocol: "Investigating DOIs classes of errors" V.2. protocols.io https://dx.doi.org/10.17504/protocols.io.bufwntpe
+Ricarda Boente, Deniz Tural, Cristian Santini, Arcangelo Massari 2021. Protocol: Investigating DOIs classes of errors V.4. protocols.io https://dx.doi.org/10.17504/protocols.io.bunnnvde
 
 Reviews of the [Investigating DOIs' classes of errors](dx.doi.org/10.17504/protocols.io.bt65nrg6):
 * Alessia Cioffi. (2021). Review of: "Investigating DOIs' classes of errors". Qeios. https://doi.org/10.32388/1PV0Y2
