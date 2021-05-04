@@ -1,6 +1,6 @@
 ISC License (ISC)
 ==================================
-_Copyright 2021 Ricarda Boente, Arcangelo Massari, Cristian Santini, Deniz Tural_
+_Copyright 2021 Arcangelo Massari, Cristian Santini, Ricarda Boente, Deniz Tural_
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or
 without fee is hereby granted, provided that the above copyright notice and this permission
