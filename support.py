@@ -29,7 +29,29 @@ class Support(object):
             return list(reader)
     
     @staticmethod
-    def dump_csv(data:list, path:str):
+    def read_cache(cache_path:str) -> None:
+        num = 0
+        data = list()
+        if not os.path.exists(cache_path):
+            return num, data
+        with open(cache_path, 'r', encoding='utf8') as read_obj:
+            dict_reader = csv.DictReader(read_obj)
+            for row in dict_reader:
+                row_data = {
+                    "Valid_citing_DOI": row["Valid_citing_DOI"],
+                    "Invalid_cited_DOI": row["Invalid_cited_DOI"],
+                    "Valid_DOI": row["Valid_DOI"],
+                    "Already_valid": row["Already_valid"],
+                    "Prefix_error": row.get("Prefix_error"),
+                    "Suffix_error": row.get("Suffix_error"),
+                    "Other-type_error": row.get("Other-type_error")
+                }
+                data.append(row_data)
+                num += 1
+            return num, data
+
+    @staticmethod
+    def dump_csv(data:list, path:str) -> None:
         print(f"[Support:INFO Writing csv at path {path}]")
         with open(path, 'w', newline='', encoding='utf8')  as output_file:
             keys = data[0].keys()
@@ -38,7 +60,7 @@ class Support(object):
             dict_writer.writerows(data)
 
     @staticmethod
-    def dump_json(json_data:dict, path:str):
+    def dump_json(json_data:dict, path:str) -> None:
         with open(path, 'w') as outfile:
             print(f"[Support: INFO] Writing json to path {path}")
             json.dump(json_data, outfile, sort_keys=True, indent=4)
@@ -61,7 +83,7 @@ class Support(object):
         session.mount('https://', adapter)
         return session
     
-    def handle_request(self, url:str, cache_path:str="", error_log_dict:dict=dict()):
+    def handle_request(self, url:str, cache_path:str="", error_log_dict:dict=dict()) -> json:
         if cache_path != "":
             requests_cache.install_cache(cache_path)
         try:
@@ -74,7 +96,7 @@ class Support(object):
             error_log_dict[url] = str(e)
     
     @staticmethod
-    def get_all_crossref_dois(folder_path:str="./dataset/crossref/"):
+    def get_all_crossref_dois(folder_path:str="./dataset/crossref/") -> list:
         json_files = [pos_json for pos_json in os.listdir(folder_path) if pos_json.endswith('.json')]
         dois = list()
         pbar = tqdm(total=len(json_files))

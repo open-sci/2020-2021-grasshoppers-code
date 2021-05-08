@@ -1,7 +1,5 @@
-/logs
 /__pycache__
 /test
-/cache
 *.sqlite
 .vscode/
 /dataset/crossref
