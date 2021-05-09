@@ -29,7 +29,7 @@ class Support(object):
             return list(reader)
     
     @staticmethod
-    def read_cache(cache_path:str) -> None:
+    def read_cache(cache_path:str) -> (int, list):
         num = 0
         data = list()
         if not os.path.exists(cache_path):
@@ -38,10 +38,10 @@ class Support(object):
             dict_reader = csv.DictReader(read_obj)
             for row in dict_reader:
                 row_data = {
-                    "Valid_citing_DOI": row["Valid_citing_DOI"],
-                    "Invalid_cited_DOI": row["Invalid_cited_DOI"],
-                    "Valid_DOI": row["Valid_DOI"],
-                    "Already_valid": row["Already_valid"],
+                    "Valid_citing_DOI": row.get("Valid_citing_DOI"),
+                    "Invalid_cited_DOI": row.get("Invalid_cited_DOI"),
+                    "Valid_DOI": row.get("Valid_DOI"),
+                    "Already_valid": row.get("Already_valid"),
                     "Prefix_error": row.get("Prefix_error"),
                     "Suffix_error": row.get("Suffix_error"),
                     "Other-type_error": row.get("Other-type_error")

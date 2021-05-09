@@ -1,6 +1,7 @@
 from support import Support
 import re
 from tqdm import tqdm
+from itertools import islice
 
 doi_logs = dict()
 
@@ -31,10 +32,15 @@ def clean_doi(doi):
     return new_doi, classes_of_errors
 
 
-def procedure(data):
-    output = list()
-    pbar = tqdm(total=len(data))
+def procedure(data, cache_path:str, cache_every:int=100):
+    start_index, output = Support.read_cache(cache_path=cache_path)
+    pbar = tqdm(total=len(data)-start_index)
+    data = islice(data, start_index + 1, None)
+    i = 0
     for row in data:
+        if i == cache_every:
+            Support.dump_csv(data=output, path=cache_path)
+            i = 0
         invalid_cited_doi = row["Invalid_cited_DOI"]
         unclean_dictionary = {
             "Invalid_cited_DOI": invalid_cited_doi,
@@ -64,13 +70,17 @@ def procedure(data):
         else:
             output.append(unclean_dictionary)
         pbar.update(1)
+        i += 1
     pbar.close()
     return output
 
-
 data = Support.process_csv_input(path="./dataset/invalid_dois.csv")
-output = procedure(data)
-
+output = procedure(data=data, cache_path="./cache/xu_2019_results.csv")
 Support().dump_csv(data=output, path="./xu_2019_results.csv")
+if len(doi_logs) > 0:
+    print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
+    Support().dump_json(doi_logs, "./doi_logs.json")
+
+
 
 
