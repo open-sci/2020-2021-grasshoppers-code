@@ -4,3 +4,6 @@
 .vscode/
 /dataset/crossref
 /dataset/crossref_dois.csv
+doi_logs.json
+new_check.py
+new_data.py

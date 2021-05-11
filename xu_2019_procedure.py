@@ -8,8 +8,8 @@ doi_logs = dict()
 def clean_doi(doi):
     prefix_regex = "^(?:D[0|O]I\/?|HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/|[0|O]RG\/|[:\/]|\d+\.HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/?)+(.*)"
     suffix_regex = "(.*?)(?:\/-\/DCSUPPLEMENTAL|\/SUPPINF[0|O]\.?|[\s\.;]?PMID:[\d]+|[\.\/:]|[\s\.;]?PMCID:PMC\d+|[\(\.;]EPUB|[\(\[]EPUBAHEADOFPRINT[\)\]]|[\s\.;]?ARTICLEPUBLISHEDONLINE.*?\d{4}|[\.\(]*HTTP:\/\/.*?)$"
-    tmp_doi = doi.upper().replace(" ", "")
-    prefix_match = re.search(prefix_regex, tmp_doi)
+    tmp_doi = doi.replace(" ", "")
+    prefix_match = re.search(prefix_regex, tmp_doi, re.IGNORECASE)
     classes_of_errors = {
         "prefix": 0,
         "suffix": 0,
@@ -17,18 +17,18 @@ def clean_doi(doi):
     }
     if prefix_match:
         tmp_doi = prefix_match.group(1)
-        classes_of_errors["prefix"] += 1
-    suffix_match = re.search(suffix_regex, tmp_doi)
+        classes_of_errors["prefix"] = 1
+    suffix_match = re.search(suffix_regex, tmp_doi, re.IGNORECASE)
     if suffix_match:
         tmp_doi = suffix_match.group(1)
-        classes_of_errors["suffix"] += 1
+        classes_of_errors["suffix"] = 1
     new_doi = re.sub("\\\\", "", tmp_doi)
     new_doi = re.sub("__", "_", new_doi)
     new_doi = re.sub("\\.\\.", ".", new_doi)
     new_doi = re.sub("<.*?>.*?</.*?>", "", new_doi)
     new_doi = re.sub("<.*?/>", "", new_doi)
     if new_doi != tmp_doi:
-        classes_of_errors["other-type"] += 1
+        classes_of_errors["other-type"] = 1
     return new_doi, classes_of_errors
 
 
@@ -41,7 +41,7 @@ def procedure(data, cache_path:str, cache_every:int=100):
         if i == cache_every:
             Support.dump_csv(data=output, path=cache_path)
             i = 0
-        invalid_cited_doi = row["Invalid_cited_DOI"]
+        invalid_cited_doi = row["Invalid_cited_DOI"].lower()
         unclean_dictionary = {
             "Invalid_cited_DOI": invalid_cited_doi,
             "Valid_DOI": "",
@@ -50,6 +50,7 @@ def procedure(data, cache_path:str, cache_every:int=100):
             "Other-type_error": 0
         }
         new_doi, classes_of_errors = clean_doi(invalid_cited_doi)
+        new_doi = new_doi.lower()
         clean_dictionary = {
             "Invalid_cited_DOI": invalid_cited_doi,
             "Valid_DOI": new_doi,

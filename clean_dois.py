@@ -24,7 +24,7 @@ class Clean_DOIs(object):
         self.crossref_dois = crossref_dois
         if len(self.crossref_dois) > 0:
             print("[Clean_DOIs: INFO] Storing Crossref DOIs in a set")
-            self.crossref_dois = {item["crossref_doi"] for item in crossref_dois}
+            self.crossref_dois = {item["crossref_doi"].lower() for item in crossref_dois}
         self.request_cache = request_cache
         self.logs = logs
         prefix_dx = r"HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/"
@@ -62,8 +62,8 @@ class Clean_DOIs(object):
             if i == cache_every:
                 Support.dump_csv(data=checked_dois, path=cache_path)
                 i = 0
-            valid_citing_doi = row["Valid_citing_DOI"]
-            invalid_cited_doi = row["Invalid_cited_DOI"]
+            valid_citing_doi = row["Valid_citing_DOI"].lower()
+            invalid_cited_doi = row["Invalid_cited_DOI"].lower()
             invalid_dictionary = {
                 "Valid_citing_DOI": valid_citing_doi,
                 "Invalid_cited_DOI": invalid_cited_doi, 
@@ -100,24 +100,26 @@ class Clean_DOIs(object):
             if i == cache_every:
                 Support.dump_csv(data=output, path=cache_path)
                 i = 0
-            valid_citing_doi = row["Valid_citing_DOI"]
-            invalid_cited_doi = row["Invalid_cited_DOI"]
+            valid_citing_doi = row["Valid_citing_DOI"].lower()
+            invalid_cited_doi = row["Invalid_cited_DOI"].lower()
+            already_valid = row["Already_valid"]
             unclean_dictionary = {
                 "Valid_citing_DOI": valid_citing_doi,
                 "Invalid_cited_DOI": invalid_cited_doi,
-                "Valid_DOI": row["Valid_DOI"],
-                "Already_valid": row["Already_valid"],
+                "Valid_DOI": row["Valid_DOI"].lower(),
+                "Already_valid": already_valid,
                 "Prefix_error": 0,
                 "Suffix_error": 0,
                 "Other-type_error": 0
             }
-            if row["Already_valid"] != 1:
+            if int(already_valid) == 0:
                 new_doi, classes_of_errors = self.clean_doi(invalid_cited_doi)
+                new_doi = new_doi.lower()
                 clean_dictionary = {
                     "Valid_citing_DOI": valid_citing_doi,
                     "Invalid_cited_DOI": invalid_cited_doi,
                     "Valid_DOI": new_doi,
-                    "Already_valid": row["Already_valid"],
+                    "Already_valid": already_valid,
                     "Prefix_error": classes_of_errors["prefix"],
                     "Suffix_error": classes_of_errors["suffix"],
                     "Other-type_error": classes_of_errors["other-type"]
@@ -134,18 +136,18 @@ class Clean_DOIs(object):
                             output.append(unclean_dictionary)
                     else:
                         output.append(unclean_dictionary)
-                else:
+                elif new_doi == invalid_cited_doi:
                     output.append(unclean_dictionary)
-            else:
+            elif int(already_valid) == 1:
                 output.append(unclean_dictionary)
             pbar.update(1)
             i += 1
         pbar.close()
         return output
     
-    def clean_doi(self, doi:str) -> (str, dict):
-        tmp_doi = doi.upper().replace(" ", "")
-        prefix_match = re.search(self.prefix_regex, tmp_doi)
+    def clean_doi(self, doi:str) -> tuple[str, dict]:
+        tmp_doi = doi.replace(" ", "")
+        prefix_match = re.search(self.prefix_regex, tmp_doi, re.IGNORECASE)
         classes_of_errors = {
             "prefix": 0,
             "suffix": 0,
@@ -153,18 +155,18 @@ class Clean_DOIs(object):
         }
         if prefix_match:
             tmp_doi = prefix_match.group(1)
-            classes_of_errors["prefix"] += 1
-        suffix_match = re.search(self.suffix_regex, tmp_doi)
+            classes_of_errors["prefix"] = 1
+        suffix_match = re.search(self.suffix_regex, tmp_doi, re.IGNORECASE)
         if suffix_match:
             tmp_doi = suffix_match.group(1)
-            classes_of_errors["suffix"] += 1
+            classes_of_errors["suffix"] = 1
         new_doi = re.sub("\\\\", "", tmp_doi)
         new_doi = re.sub("__", "_", new_doi)
         new_doi = re.sub("\\.\\.", ".", new_doi)
         new_doi = re.sub("<.*?>.*?</.*?>", "", new_doi)
         new_doi = re.sub("<.*?/>", "", new_doi)
         if new_doi != tmp_doi:
-            classes_of_errors["other-type"] += 1
+            classes_of_errors["other-type"] = 1
         return new_doi, classes_of_errors
     
     def get_number_of_matches(self, data:list) -> dict:

@@ -29,7 +29,7 @@ class Support(object):
             return list(reader)
     
     @staticmethod
-    def read_cache(cache_path:str) -> (int, list):
+    def read_cache(cache_path:str) -> tuple[int, list]:
         num = 0
         data = list()
         if not os.path.exists(cache_path):
