@@ -1,3 +1,4 @@
+from __future__ import annotations
 from support import Support
 import re
 from tqdm import tqdm
