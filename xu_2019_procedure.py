@@ -34,14 +34,18 @@ def clean_doi(doi):
     return new_doi, classes_of_errors
 
 
-def procedure(data, cache_path:str, cache_every:int=100):
-    start_index, output = Support.read_cache(cache_path=cache_path)
-    pbar = tqdm(total=len(data)-start_index)
-    data = islice(data, start_index + 1, None)
+def procedure(data, autosave_path:str="", cache_every:int=100):
+    if autosave_path != "":
+        start_index, output = Support.read_cache(cache_path=autosave_path)
+        pbar = tqdm(total=len(data)-start_index)
+        data = islice(data, start_index + 1, None)
+    else:
+        output = list()
+        pbar = tqdm(total=len(data))
     i = 0
     for row in data:
-        if i == cache_every:
-            Support.dump_csv(data=output, path=cache_path)
+        if autosave_path != "" and i == cache_every:
+            Support.dump_csv(data=output, path=autosave_path)
             i = 0
         invalid_cited_doi = row["Invalid_cited_DOI"].lower()
         unclean_dictionary = {

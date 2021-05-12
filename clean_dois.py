@@ -54,14 +54,18 @@ class Clean_DOIs(object):
         self.prefix_regex = r"(.*?)(?:\.)?(?:" + "|".join(self.prefix_regex_lst) + r")(.*)"
         self.suffix_regex = r"(.*?)(?:" + "|".join(self.suffix_regex_lst) + r")$"
 
-    def check_dois_validity(self, data:list, cache_path:str, cache_every:int=100) -> list:
-        start_index, checked_dois = Support.read_cache(cache_path=cache_path)
-        pbar = tqdm(total=len(data)-start_index)
-        data = islice(data, start_index + 1, None)
+    def check_dois_validity(self, data:list, autosave_path:str="", cache_every:int=100) -> list:
+        if autosave_path != "":
+            start_index, checked_dois = Support.read_cache(autosave_path=autosave_path)
+            pbar = tqdm(total=len(data)-start_index)
+            data = islice(data, start_index + 1, None)
+        else:
+            checked_dois = list()
+            pbar = tqdm(total=len(data))
         i = 0
         for row in data:
-            if i == cache_every:
-                Support.dump_csv(data=checked_dois, path=cache_path)
+            if autosave_path != "" and i == cache_every:
+                Support.dump_csv(data=checked_dois, path=autosave_path)
                 i = 0
             valid_citing_doi = row["Valid_citing_DOI"].lower()
             invalid_cited_doi = row["Invalid_cited_DOI"].lower()
@@ -92,14 +96,18 @@ class Clean_DOIs(object):
         pbar.close()
         return checked_dois
     
-    def procedure(self, data:list, cache_path:str, cache_every:int=100) -> list:
-        start_index, output = Support.read_cache(cache_path=cache_path)
-        pbar = tqdm(total=len(data)-start_index)
-        data = islice(data, start_index + 1, None)
+    def procedure(self, data:list, autosave_path:str="", cache_every:int=100) -> list:
+        if autosave_path != "":
+            start_index, output = Support.read_cache(autosave_path=autosave_path)
+            pbar = tqdm(total=len(data)-start_index)
+            data = islice(data, start_index + 1, None)
+        else:
+            output = list()
+            pbar = tqdm(total=len(data))
         i = 0
         for row in data:
-            if i == cache_every:
-                Support.dump_csv(data=output, path=cache_path)
+            if autosave_path != "" and i == cache_every:
+                Support.dump_csv(data=output, path=autosave_path)
                 i = 0
             valid_citing_doi = row["Valid_citing_DOI"].lower()
             invalid_cited_doi = row["Invalid_cited_DOI"].lower()

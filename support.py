@@ -30,12 +30,12 @@ class Support(object):
             return list(reader)
     
     @staticmethod
-    def read_cache(cache_path:str) -> tuple[int, list]:
+    def read_cache(autosave_path:str) -> tuple[int, list]:
         num = 0
         data = list()
-        if not os.path.exists(cache_path):
+        if not os.path.exists(autosave_path):
             return num, data
-        with open(cache_path, 'r', encoding='utf8') as read_obj:
+        with open(autosave_path, 'r', encoding='utf8') as read_obj:
             dict_reader = csv.DictReader(read_obj)
             for row in dict_reader:
                 row_data = {
