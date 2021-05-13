@@ -36,7 +36,7 @@ def clean_doi(doi):
 
 def procedure(data, autosave_path:str="", cache_every:int=100):
     if autosave_path != "":
-        start_index, output = Support.read_cache(cache_path=autosave_path)
+        start_index, output = Support.read_cache(autosave_path=autosave_path)
         pbar = tqdm(total=len(data)-start_index)
         data = islice(data, start_index + 1, None)
     else:
@@ -82,7 +82,7 @@ def procedure(data, autosave_path:str="", cache_every:int=100):
     return output
 
 data = Support.process_csv_input(path="./dataset/invalid_dois.csv")
-output = procedure(data=data, cache_path="./cache/xu_2019_results.csv")
+output = procedure(data=data, autosave_path="./cache/xu_2019_results.csv", cache_every=10000)
 Support().dump_csv(data=output, path="./xu_2019_results.csv")
 if len(doi_logs) > 0:
     print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
