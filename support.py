@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-import requests, requests_cache, json, csv, os, ijson
+import requests, requests_cache, json, csv, os, ijson, random
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -110,4 +110,13 @@ class Support(object):
             pbar.update(1)
         pbar.close()
         return dois
+    
+    @staticmethod
+    def get_random_results(data:list, number:int=100) -> list:
+        output = random.sample(
+            [i for i in data if len(i["Valid_DOI"]) > 0 and int(i["Already_valid"]) == 0], 
+            number
+        )
+        return output
+
             

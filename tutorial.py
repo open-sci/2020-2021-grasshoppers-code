@@ -18,10 +18,10 @@ checked_dois = clean_dois.check_dois_validity(data=data, cache_path="./cache/che
 
 # To clean DOIs
 output = clean_dois.procedure(data=checked_dois, cache_path="./cache/output.csv")
-Support().dump_csv(data=output, path="./output.csv")
+Support().dump_csv(data=output, path="./output/output.csv")
 if len(doi_logs) > 0:
     print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
-    Support().dump_json(doi_logs, "./doi_logs.json")
+    Support().dump_json(doi_logs, "./logs/doi_logs.json")
 
 # To get the number of matches of each sub-class of factual errors
 number_of_matches = clean_dois.get_number_of_matches(data=data)
