@@ -117,6 +117,12 @@ class Support(object):
             [i for i in data if len(i["Valid_DOI"]) > 0 and int(i["Already_valid"]) == 0], 
             number
         )
+        for row in output:
+            row["Really_valid"] = 0
         return output
+
+data = Support.process_csv_input(path="./output/output.csv")
+output = Support.get_random_results(data=data)
+Support.dump_csv(data=output, path="./output/100_random_cleaned_dois.csv")
 
             
