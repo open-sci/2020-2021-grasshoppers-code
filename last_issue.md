@@ -77,6 +77,44 @@ Section 3.4.5: in case you have developed unit tests to check the correctness of
 The answer is no, the test driven development procedure has not been adopted. However, we think it would have been better to adopt it. Although TDD requires tests to be developed before code, we believe that it still has value to develop them afterwards, in order to have a solid foundation in case of extensions or code changes. For this reason, we developed unit tests, using the Python built-in "unittest" framework.
 </p>
 
+# Protocol
+<blockquote>
+  "The data needed for this work is provided by COCI as a CSV": it is not provided by COCI (which is a collection), it is provided by myself.
+</blockquote>
+<p>
+In our protocol we removed all the mentions of COCI as provider of the dataset and we substituted them with the reference to the Zenodo repository.
+</p>
+<blockquote>
+  "The records are provided on public licence by": change in "license in" and put the bibliographic reference in a shape it is clear (e.g. by using italic or other appropriate format).
+</blockquote>
+<p>
+The text was corrected as suggested and we put the full citation to the Zenodo repository of the dataset.
+</p>
+<blockquote>
+ "40'228": write "40,228" (the comma in English notation is visual separator).
+</blockquote>
+<p>
+As suggested, we used a comma instead of an apostrophe as visual separator for groups of thousands.
+</p>
+<blockquote>
+  "there are two main classes of errors: author errors, made by authors when creating the list of cited articles for their publication, and database mapping errors, related to a data-entry error": it would be good to acknowledge here the fact that we have, in general, "human errors", i.e. those introduced by authors, editors and publisher representatives when managing the references - as explained during the workshop event.
+</blockquote>
+<p>
+In the newer version of the protocol we described the class of "human-made" errors in addition to the two ("author errors" and "database-mapping errors") proposed in (Franceschini et al., 2015). Moreover we removed any mention to an adoption of the forementioned taxonomy in our methodology since our research question was not focused on the origin of errors present in DOIs but merely in their types and characteristics. 
+</p>
+<blockquote>
+  "we manually isolated from a subset of 100 DOIs recurrent strings": how did you selected such 100 DOIs?
+</blockquote>
+<p>
+Since we didn't store the subset of 100 DOIs from which we extracted recurrent patterns of errors and we were not able to reproduce it, we removed any mention to this subset of DOIs and we limited ourselves to state that we did a manual identification of a subset of recurrent strings which corrupted DOI prefixes and suffixes.
+</p>
+<blockquote>
+  "eventual unwanted characters": remove "eventual"
+</blockquote>
+<p>
+We removed the occurrence of the word "eventual" in section 3.3 of the newer version of the protocol.
+</p>
+
 
 # Article
 <p>All the mentioned issues have been addressed, correcting former inconsistencies and mistakes. In addition, the article has been updated with new content, including descriptions of the added methods applied to improve the research.</p>
