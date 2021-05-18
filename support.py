@@ -120,9 +120,4 @@ class Support(object):
         for row in output:
             row["Really_valid"] = 0
         return output
-
-data = Support.process_csv_input(path="./output/output.csv")
-output = Support.get_random_results(data=data)
-Support.dump_csv(data=output, path="./output/100_random_cleaned_dois.csv")
-
             

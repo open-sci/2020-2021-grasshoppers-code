@@ -81,12 +81,35 @@ def procedure(data, autosave_path:str="", cache_every:int=100):
     pbar.close()
     return output
 
-data = Support.process_csv_input(path="./dataset/invalid_dois.csv")
-output = procedure(data=data, autosave_path="./cache/xu_2019_results.csv", cache_every=10000)
-Support().dump_csv(data=output, path="./xu_2019_results.csv")
-if len(doi_logs) > 0:
-    print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
-    Support().dump_json(doi_logs, "./doi_logs.json")
+def remove_already_valid(data:list, path_already_valid:str) -> list:
+    already_valid = Support.process_csv_input(path=path_already_valid)
+    already_valid_dois = set()
+    output = list()
+    for row in already_valid:
+        if row["Already_valid"] == "1":
+            already_valid_dois.add(row["Valid_DOI"])
+    for row in data:
+        if row["Invalid_cited_DOI"] in already_valid_dois and len(row["Valid_DOI"]) > 0:
+            print(row["Valid_DOI"])
+            output.append({
+                "Invalid_cited_DOI": row["Invalid_cited_DOI"],
+                "Valid_DOI": "",
+                "Prefix_error": 0,
+                "Suffix_error": 0,
+                "Other-type_error": 0
+            })
+        else:
+            output.append(row)
+    return output
+
+# data = Support.process_csv_input(path="./dataset/invalid_dois.csv")
+# output = procedure(data=data, autosave_path="./cache/xu_2019_results.csv", cache_every=10000)
+output = Support.process_csv_input(path="./output/xu_2019_results.csv")
+output = remove_already_valid(data=output, path_already_valid="./output/checked_dois.csv")
+Support().dump_csv(data=output, path="./output/xu_2019_results_no_already_valid.csv")
+# if len(doi_logs) > 0:
+#     print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
+#     Support().dump_json(doi_logs, "./doi_logs.json")
 
 
 

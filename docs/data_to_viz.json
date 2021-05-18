@@ -1,0 +1,100 @@
+[
+    {
+        "measure": "DOIs",
+        "parent": "",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 1223295
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 1223295
+            }
+        ]
+    },
+    {
+        "measure": "Invalid_DOI",
+        "parent": "DOIs",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 1024275
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 1085807
+            }
+        ]
+    },
+    {
+        "measure": "Valid_DOI",
+        "parent": "DOIs",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 199020
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 137488
+            }
+        ]
+    },
+    {
+        "measure": "Suffix_error",
+        "parent": "Valid_DOI",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 119146
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 136541
+            }
+        ]
+    },
+    {
+        "measure": "Already_valid",
+        "parent": "Valid_DOI",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 57196
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "measure": "Prefix_error",
+        "parent": "Valid_DOI",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 21742
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 0
+            }
+        ]
+    },
+    {
+        "measure": "Other-type_error",
+        "parent": "Valid_DOI",
+        "values": [
+            {
+                "author": "New procedure",
+                "value": 953
+            },
+            {
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 953
+            }
+        ]
+    }
+]
