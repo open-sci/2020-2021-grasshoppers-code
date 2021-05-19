@@ -10,7 +10,7 @@ To reproduce the paper experiments clone the github repository on your machine a
 ```
 python tutorial.py
 ```
-This command will launch our cleaning procedure on the dataset "invalid_dois.csv" in the dataset folder. This dataset is provided on public license in Peroni, Silvio. (2021). Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI (Version 1.0) [Data set]. Zenodo. [http://doi.org/10.5281/zenodo.4625300](http://doi.org/10.5281/zenodo.4625300).<br/>
+This command will launch our cleaning procedure on the dataset "invalid_dois.csv" in the dataset folder. This dataset is provided on public license in Peroni, Silvio. (2021). Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI (Version 1.0) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4625300.<br/>
 If you want to apply our cleaning procedure on another dataset first verify that your dataset is a CSV file compliant with the fields used in our data and then modify the following line in the tutorial.py file
 ```
 data = Support.process_csv_input(path=path_to_data)
@@ -24,5 +24,10 @@ crossref_dois = Support.process_csv_input(path="./dataset/crossref_dois.csv")
 ## Results
 A visualization of the results of our experiment on the paper's dataset as well as a comparison with the results obtained by applying a procedure derived from Xu, S., Hao, L., An, X. et al. Types of DOI errors of cited references in Web of Science with a cleaning method. Scientometrics 120, 1427–1437 (2019). [https://doi.org/10.1007/s11192-019-03162-4](https://doi.org/10.1007/s11192-019-03162-4) on the same data are available in [https://open-sci.github.io/2020-2021-grasshoppers-code/](https://open-sci.github.io/2020-2021-grasshoppers-code/)
 ## References
-
-
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names (Data Management Plan) (Version 4). Zenodo. https://doi.org/10.5281/zenodo.4733920
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names: output dataset (Version v1.0.0-alpha) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4733647
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021, May 3). Cleaning different types of DOI errors found in cited references on Crossref using automated methods (Version 1). Zenodo. http://doi.org/10.5281/zenodo.4734513
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021, May). Presentation of "Cleaning different types of DOI errors found in cited references on Crossref using automated methods" (Version 1). Zenodo. http://doi.org/10.5281/zenodo.4738553
+- Ricarda Boente, Deniz Tural, Cristian Santini, Arcangelo Massari. (2021). Protocol: Investigating DOIs classes of errors V.4. protocols.io https://dx.doi.org/10.17504/protocols.io.bunnnvde
+- Peroni, Silvio. (2021). Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI (Version 1.0) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4625300
+- Xu, S., Hao, L., An, X. et al. Types of DOI errors of cited references in Web of Science with a cleaning method. Scientometrics 120, 1427–1437 (2019). https://doi.org/10.1007/s11192-019-03162-4
