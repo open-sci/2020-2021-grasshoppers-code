@@ -1,4 +1,4 @@
-from __future__ import annotations
+from typing import Tuple
 
 from support import Support
 import re
@@ -7,7 +7,7 @@ from itertools import islice
 
 doi_logs = dict()
 
-def clean_doi(doi):
+def clean_doi(doi:str) -> Tuple[str, dict]:
     prefix_regex = "^(?:D[0|O]I\/?|HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/|[0|O]RG\/|[:\/]|\d+\.HTTP:\/\/DX\.D[0|O]I\.[0|O]RG\/?)+(.*)"
     suffix_regex = "(.*?)(?:\/-\/DCSUPPLEMENTAL|\/SUPPINF[0|O]\.?|[\s\.;]?PMID:[\d]+|[\.\/:]|[\s\.;]?PMCID:PMC\d+|[\(\.;]EPUB|[\(\[]EPUBAHEADOFPRINT[\)\]]|[\s\.;]?ARTICLEPUBLISHEDONLINE.*?\d{4}|[\.\(]*HTTP:\/\/.*?)$"
     tmp_doi = doi.replace(" ", "")
@@ -34,7 +34,7 @@ def clean_doi(doi):
     return new_doi, classes_of_errors
 
 
-def procedure(data, autosave_path:str="", cache_every:int=100):
+def procedure(data:list, autosave_path:str="", cache_every:int=100) -> list:
     if autosave_path != "":
         start_index, output = Support.read_cache(autosave_path=autosave_path)
         pbar = tqdm(total=len(data)-start_index)

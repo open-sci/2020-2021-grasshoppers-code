@@ -12,7 +12,7 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
 # OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-from __future__ import annotations
+from typing import Tuple
 
 import requests, requests_cache, json, csv, os, ijson, random
 from requests import Session
@@ -30,7 +30,7 @@ class Support(object):
             return list(reader)
     
     @staticmethod
-    def read_cache(autosave_path:str) -> tuple[int, list]:
+    def read_cache(autosave_path:str) -> Tuple[int, list]:
         num = 0
         data = list()
         if not os.path.exists(autosave_path):

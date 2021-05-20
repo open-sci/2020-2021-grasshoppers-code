@@ -12,7 +12,7 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
 # OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-from __future__ import annotations
+from typing import Tuple
 
 import re, csv
 from collections import defaultdict
@@ -154,7 +154,7 @@ class Clean_DOIs(object):
         pbar.close()
         return output
     
-    def clean_doi(self, doi:str) -> tuple[str, dict]:
+    def clean_doi(self, doi:str) -> Tuple[str, dict]:
         tmp_doi = doi.replace(" ", "")
         prefix_match = re.search(self.prefix_regex, tmp_doi, re.IGNORECASE)
         classes_of_errors = {
