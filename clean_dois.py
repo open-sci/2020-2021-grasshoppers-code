@@ -193,7 +193,7 @@ class Clean_DOIs(object):
             classes_of_errors["prefix"].setdefault(regex, 0)
         for regex in self.suffix_regex_lst:
             classes_of_errors.setdefault("suffix", dict())
-            classes_of_errors["suffix"].setdefault(regex, 0)
+            classes_of_errors["suffix"].setdefault(f"({regex})$", 0)
         pbar = tqdm(total=3)
         for category in classes_of_errors:
             print(f"[Clean_DOIs:INFO] Checking matches for class {category}")
