@@ -32,7 +32,7 @@ crossref_dois = Support.process_csv_input(path="./dataset/crossref_dois.csv")
 
 The experiment was conducted on a computer with the following hardware specifications. Only the components relevant to the results' reproduction are reported:
 
-- CPU: Intel Core i5 8500 @ 3.00 GHz, 6 core, 6 processori logici
+- CPU: Intel Core i5 8500 @ 3.00 GHz, 6 core, 6 logic processors
 - RAM: 32 GB DDR4 3000 MHz CL15
 - Storage: 1 TB SSD Nvme PCIe 3.0
 
