@@ -1,3 +1,4 @@
+from typing import List, Dict
 import csv, json
 
 output = list()
@@ -13,8 +14,8 @@ def dump_json(json_data:dict, path:str) -> None:
         print(f"[Support: INFO] Writing json to path {path}")
         json.dump(json_data, outfile, sort_keys=True, indent=4)
 
-output = process_csv_input(path="./output/output.csv")
-xu = process_csv_input(path="./output/xu_2019_results_no_already_valid.csv")
+output:List[Dict] = process_csv_input(path="./output/output.csv")
+xu:List[Dict] = process_csv_input(path="./output/xu_2019_results_no_already_valid.csv")
 
 output_to_viz = [
     {

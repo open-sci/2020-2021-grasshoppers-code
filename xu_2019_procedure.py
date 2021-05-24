@@ -90,7 +90,6 @@ def remove_already_valid(data:list, path_already_valid:str) -> list:
             already_valid_dois.add(row["Valid_DOI"])
     for row in data:
         if row["Invalid_cited_DOI"] in already_valid_dois and len(row["Valid_DOI"]) > 0:
-            print(row["Valid_DOI"])
             output.append({
                 "Invalid_cited_DOI": row["Invalid_cited_DOI"],
                 "Valid_DOI": "",
@@ -106,7 +105,7 @@ def remove_already_valid(data:list, path_already_valid:str) -> list:
 # output = procedure(data=data, autosave_path="./cache/xu_2019_results.csv", cache_every=10000)
 output = Support.process_csv_input(path="./output/xu_2019_results.csv")
 output = remove_already_valid(data=output, path_already_valid="./output/checked_dois.csv")
-Support().dump_csv(data=output, path="./output/xu_2019_results_no_already_valid.csv")
+# Support().dump_csv(data=output, path="./output/xu_2019_results_no_already_valid.csv")
 # if len(doi_logs) > 0:
 #     print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
 #     Support().dump_json(doi_logs, "./doi_logs.json")
