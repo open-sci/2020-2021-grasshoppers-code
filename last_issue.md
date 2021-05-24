@@ -8,9 +8,8 @@ Indeed, it is true, if the PC were to shut down the entire work (except for the 
 The code was inspired by the strategy adopted by the Leftovers 2.0 team to solve the same problem.
 </p>
 <blockquote>An invited expert identified a bug in the code for cleaning the DOIs. Is it possible that this bug affected the results presented? If so, it would be necessary to recompute the whole data, of course.</blockquote>
-<img src="https://i.kym-cdn.com/entries/icons/original/000/028/596/dsmGaKWMeHXe9QuJtq_ys30PNfTGnMsRuHuo_MUzGCg.jpg" alt="Well yes, but actually no meme">
 <p>
-Yess, the results related to the application of regular expressions have to be recalculated and have been recalculated. However, the results relating to the verification of the previous validity of the DOIs do not have to be recalculated and have been reused, to speed up the process.
+Yes, the results related to the application of regular expressions have to be recalculated and have been recalculated. However, the results relating to the verification of the previous validity of the DOIs do not have to be recalculated and have been reused, to speed up the process.
 </p>
 
 # Data Management Plan
