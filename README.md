@@ -22,7 +22,7 @@ If you want to apply the cleaning procedure on another dataset, first verify tha
 data = Support.process_csv_input(path=path_to_data)
 ```
 Beware that the algorithm will require days for huge amount of data, like in this research (e.g. > 1M rows).<br/>
-If you want to speed up the process, you can add the following line after importing your data in tutorial.py
+If you want to speed up the process, you can unzip the "crossref_dois.zip" archive in the dataset folder and then add the following line after importing your data in tutorial.py
 ```
 crossref_dois = Support.process_csv_input(path="./dataset/crossref_dois.csv")
 ```
