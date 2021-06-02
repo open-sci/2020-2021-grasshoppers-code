@@ -60,12 +60,6 @@ class Support(object):
             dict_writer.writeheader()
             dict_writer.writerows(data)
 
-    @staticmethod
-    def dump_json(json_data:dict, path:str) -> None:
-        with open(path, 'w') as outfile:
-            print(f"[Support: INFO] Writing json to path {path}")
-            json.dump(json_data, outfile, sort_keys=True, indent=4)
-
     def _requests_retry_session(
         self,
         tries=1,
