@@ -69,7 +69,7 @@ This section has also been checked and edited. We used Semantic Versioning 2.0.0
 Section 4.4: the answer provided is "[Other]" but not additional comment has been added there to clarify what that "[Other]" means.
 </blockquote>
 <p>
-The answer provided is "Other" We add an additional comment to clarify what that "Other" means. The data is available on Github Repository and Zenodo under an ISC license for re-use.
+We added an additional comment to clarify what that "Other" means, that is "The data is available on Github Repository and Zenodo under an ISC license".
 </p>
 
 ## Classes of errors in DOI names: code
