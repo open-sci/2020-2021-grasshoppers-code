@@ -145,7 +145,7 @@ We removed the occurrence of the word "eventual" in section 3.3 of the newer ver
 
 # Software
 <p>
-The README.md file was added to the Github repository. In particular, in the chapter "Getting started" was described how to reproduce the experiment, which methods to call and in what order. In the chapter "Hardware configuration" were reported relevant specifications of the PC on which the research was conducted. Finally, the chapter "References" refers to the resources mentioned or linked, such as the DMP, the protocol and the article.
+The README.md file was added to the Github repository. In particular, in the chapter "Getting started" was described how to reproduce the experiment, which methods to call and in what order. In the chapter "Hardware configuration" were reported relevant specifications of the PC on which the research was conducted. The chapter "Results" refers to the website on which the outcomes' visualizations were published. Finally, the chapter "References" refers to the resources mentioned or linked, such as the DMP, the protocol and the article.
 </p>
 
 
