@@ -78,8 +78,7 @@ We added an additional comment to clarify what that "Other" means, that is "The 
 Section 2.1: in this context the term "data" should be interpreted as "software". Thus, the question refers to if you are going to reuse existing software for accomplishing your goal. Under this meaning, please be aware that also the Section 2.2 and Section 2.3 could be populated with some information. Please notice that this interpretation of "data" as "software" may affect also other points of the DMP.
 </blockquote>
 <p>
-Despite the fact that we have answered these questions above, our responses are not visible due to an issue with the Argos platform.We have had Argos problems like this very often in a few questions. The answer for 2.2: ZENODO. Related to the question "Which data will be re-used": we responded, Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI.
-</p>
+All libraries used within our code have been fully referenced, specifying which use has been made of them. References were made to the specific versions used, published on the Software Heritage Archive.</p>
 
 
 <blockquote>
