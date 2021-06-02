@@ -48,14 +48,14 @@ Section 3.1.3: you have to specify the vocabulary used, avoiding the sentence "C
 </blockquote>
 <p>
 The vocabulary used for metadata has been specified. Since the dataset is published on Zenodo, the metadata about it is provided by Zenodo
-itself using the Datacite Metadata Schema.</p>
+itself using the Datacite Metadata Schema (https://schema.datacite.org/).</p>
 
 
 <blockquote>
 Section 3.1.8: since you specified (in section 3.1.7) that you will use naming convention, you have to specify which naming convention is adopted.
 </blockquote>
 <p>
-This part corrected and specified which naming convention is adopted.
+The naming convention adopted was specified, in this way: "The field titles in the CSV file will be indicated in snake case, with each space replaced by an underscore. The first letter of each field will be capitalized, as well as the acronym "DOI" will always appear in capital letters. In addition, the DOI names reported in the cells of the file will always be in lowercase. Finally, whether or not a value belongs to a class will be indicated with 1 or 0, having the Boolean value of true or false respectively".
 </p>
 
 <blockquote>
