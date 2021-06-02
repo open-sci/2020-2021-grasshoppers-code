@@ -143,6 +143,12 @@ We removed the occurrence of the word "eventual" in section 3.3 of the newer ver
 </p>
 
 
+# Software
+<p>
+The README.md file was added to the Github repository. In particular, in the chapter "Getting started" was described how to reproduce the experiment, which methods to call and in what order. In the chapter "Hardware configuration" were reported relevant specifications of the PC on which the research was conducted. Finally, the chapter "References" refers to the resources mentioned or linked, such as the DMP, the protocol and the article.
+</p>
+
+
 # Article
 <p>All the mentioned issues have been addressed, correcting former inconsistencies and mistakes. In addition, the article has been updated with new content, including descriptions of the added methods applied to improve the research.</p>
 
