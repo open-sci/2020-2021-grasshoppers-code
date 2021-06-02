@@ -93,7 +93,7 @@ The answer to this question has been modified. Semantic Versioning 2.0.0 (https:
 Section 3.1.15: I do not believe you use/share Python Compiled Files (.pyc) but rather simple Python files (.py), right?
 </blockquote>
 <p>
-Since Python compiled files seems to be the only option, we saw it as suitable. We corrected this by using the description section.
+The data format used was corrected from Compiled Files (.pyc) to Python files (.py).
 </p>
 
 <blockquote>
