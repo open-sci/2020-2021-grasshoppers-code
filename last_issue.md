@@ -10,7 +10,7 @@ Yes, the results have been recalculated considering the entire dataset of input 
 It would be great to compare the results you obtained if you use only the procedure (i.e. regular expressions) described in Xu et al. vs all those that you obtained by using your updated methodology, i.e. that one which includes more regex as you have presented.
 </blockquote>
 <p>It was interesting indeed. The procedure of Xu et al. was reproduced and their results compared with ours. The data were reported and interpreted in the new version of the article and the visualization has been updated to take into account this comparison.</p>
-<img src="https://raw.githubusercontent.com/open-sci/2020-2021-grasshoppers-code/main/docs/img/results_barchart.svg"/>
+<img src="https://raw.githubusercontent.com/open-sci/2020-2021-grasshoppers-code/main/docs/img/results_barchart.jpg"/>
 <p>
 The comparison to the reference study made by Xu et al. (2019) showed that the methods used in this research were able to clean more DOIs overall. However, which could be seen as surprising, applying the methods from Xu et al. allowed 17,395 more suffix errors to be cleaned. On the other hand, the reference procedure did not clean any prefix errors in the given dataset. This result can be explained by taking a closer look at the regular expressions and the definition of prefix- and suffix-type errors used by Xu et al. In the study presented here, the regular expression for prefix errors was broader, as it considered prefix errors any additional strings before the DOI, even if they were not at the beginning of the string. On the other hand, the reference procedure considered prefix errors only those at the beginning of the string, hence the absence of matches in the given dataset. The current study, for instance, in the DOI "10.1016/J.JLUMIN.2004.10.018.HTTP://DX.DOI.ORG/10.1016/J.JLUMIN.2004.10.018", considered the presence of the DOI proxy server as a prefix-error, because it appeared before the DOI. The higher number of suffix errors cleaned with the methods by Xu et al. comes as a consequence. Since the present algorithm subsequently checks a DOI name for prefix, suffix and, finally, other-type errors, the errors not caught as prefix errors will be cleaned as suffix errors in the next step. Presumably, the mistake related to the presence of the DOI proxy server was fixed as suffix error in the Xu et al. procedure, which lead to the higher number of matches.
 </p>
@@ -30,10 +30,14 @@ Did you check, in some way, if the cleaning of a DOI produced a valid DOI which 
 </blockquote>
 <p>
 To check if the cleaned DOI names were actually part of the citing entity references, 100 random DOIs were selected from the results and checked manually. Three cases were differentiated: 
+</p>
 <ol>
 <li>the reference to the cleaned DOI was verified;</li>
 <li>no reference to the cleaned DOI could be found;</li>
 <li>the reference list and metadata of the given articles were not accessible, making it impossible to produce a statement about the correctness of the DOI.</li>
+</ol>
+<p>
+The 98% of the cleaned cited DOIs proved as correct after the manual check. However, a closer investigation of the two DOIs resulted as incorrect showed that the reason is not to be imputed to the algorithm adopted. The DOI "10.1007/978-3-319-90698-0_26" should appear among the references of the article corresponding to the DOI "10.17660/actahortic.2020.1288.20", which unfortunately is behind a paywall and therefore inaccessible. This article was not the only one published on a toll-access journal among the 100 checked DOIs, but the University of Bologna, which the authors of this research are affiliated to, is not subscribed to the magazine in question, namely “ISHS Acta Horticulturae”. On the other hand, the DOI "10.1007/s10479-011-0841-3" should be cited by "10.1101/539833", but, although reported by Crossref, it does not appear in the original article, not only in its correct version, but also in the invalid one, that is "10.1007/s10479-011-0841-3." with a point after the DOI. This mismatch can be explained as a processing error made by the platform that published the article, that is bioRxiv, since the same invalid DOI appears 118 times in the dataset analyzed and not even one in the articles that mention it.
 </p>
 
 # Data Management Plan
