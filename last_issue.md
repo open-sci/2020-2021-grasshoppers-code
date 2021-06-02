@@ -47,8 +47,8 @@ The 98% of the cleaned cited DOIs proved as correct after the manual check. Howe
 Section 3.1.3: you have to specify the vocabulary used, avoiding the sentence "Couldn't find it? Insert it manually"
 </blockquote>
 <p>
-In fact, although we determined the vocabulary, the phrase "Couldn't find it? Insert it manually" came to the fore in the pdf file. To prevent this, we have clarified which vocabulary we use, with specify section.
-</p>
+The vocabulary used for metadata has been specified. Since the dataset is published on Zenodo, the metadata about it is provided by Zenodo
+itself using the Datacite Metadata Schema.</p>
 
 
 <blockquote>
