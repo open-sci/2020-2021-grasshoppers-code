@@ -126,7 +126,7 @@ As suggested, we used a comma instead of an apostrophe as visual separator for g
   "there are two main classes of errors: author errors, made by authors when creating the list of cited articles for their publication, and database mapping errors, related to a data-entry error": it would be good to acknowledge here the fact that we have, in general, "human errors", i.e. those introduced by authors, editors and publisher representatives when managing the references - as explained during the workshop event.
 </blockquote>
 <p>
-In the newer version of the protocol we described the class of "human-made" errors in addition to the two ("author errors" and "database-mapping errors") proposed in (Franceschini et al., 2015). Moreover we removed any mention to an adoption of the forementioned taxonomy in our methodology since our research question was not focused on the origin of errors present in DOIs but merely in their types and characteristics. 
+In the newer version of the protocol we described the class of human-made errors, in addition to the two author errors and database-mapping errors classes.
 </p>
 <blockquote>
   "we manually isolated from a subset of 100 DOIs recurrent strings": how did you selected such 100 DOIs?
