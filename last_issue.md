@@ -114,7 +114,7 @@ In our protocol we removed all the mentions of COCI as provider of the dataset a
   "The records are provided on public licence by": change in "license in" and put the bibliographic reference in a shape it is clear (e.g. by using italic or other appropriate format).
 </blockquote>
 <p>
-The text was corrected as suggested. Now it is: "The invalid DOIs were collected by Silvio Peroni while processing data provided by Crossref, and published on public license in the dataset <em>Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI</em>, available the address http://doi.org/10.5281/zenodo.4625300.".
+The text was corrected as suggested. Now it is: "The invalid DOIs were collected by Silvio Peroni while processing data provided by Crossref, and are provided on public licence in Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI , available the address http://doi.org/10.5281/zenodo.4625300.".
 </p>
 <blockquote>
  "40'228": write "40,228" (the comma in English notation is visual separator).
