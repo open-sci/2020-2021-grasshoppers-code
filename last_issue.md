@@ -42,6 +42,13 @@ The 98% of the cleaned cited DOIs proved as correct after the manual check. Howe
 
 # Data Management Plan
 
+<blockquote>
+The tense used in the DMP is the future, since it is developed before any data have been produced. Thus, the answers of the various points should reflect this.
+</blockquote>
+<p>
+Answers to various points of the DMP were converted to the future tense.
+</p>
+
 ## Title: Classes of errors in DOI names: output dataset
 <blockquote>
 Section 3.1.3: you have to specify the vocabulary used, avoiding the sentence "Couldn't find it? Insert it manually"
