@@ -14,10 +14,10 @@ doi_logs = dict()
 clean_dois = Clean_DOIs(logs=doi_logs)
 
 # To check if DOIs are valid. The crossref_dois parameter is optional
-checked_dois = clean_dois.check_dois_validity(data=data, cache_path="./cache/checked_dois.csv")
+checked_dois = clean_dois.check_dois_validity(data=data, autosave_path="./cache/checked_dois.csv")
 
 # To clean DOIs
-output = clean_dois.procedure(data=checked_dois, cache_path="./cache/output.csv")
+output = clean_dois.procedure(data=checked_dois, autosave_path="./cache/output.csv")
 Support().dump_csv(data=output, path="./output/output.csv")
 if len(doi_logs) > 0:
     print("[Support: INFO] Errors have been found. Writing logs to ./logs/doi_logs.json")
