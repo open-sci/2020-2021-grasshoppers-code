@@ -27,7 +27,7 @@ If you want to speed up the process, you can unzip the "crossref_dois.zip" archi
 ```
 crossref_dois = Support.process_csv_input(path="./dataset/crossref_dois.csv")
 ```
-**Note:** This line will allow to perform the DOI validation through a list of DOI registered by Crossref available in the dataset folder. It is recommended to perform the following step having at least 64GB of RAM, as over 200 million DOIs need to be stored in a set and kept on RAM throughout the execution of our software.
+**Note:** This line will allow to perform the DOI validation through a list of DOI registered by Crossref available in the dataset folder. It is recommended to perform the following step having at least 64GB of RAM, as over 120 million DOIs need to be stored in a set and kept on RAM throughout the execution of our software.
 
 ## Hardware configuration
 
