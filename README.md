@@ -43,10 +43,10 @@ A visualization of the results of our experiment, as well as a comparison with t
 
 ## References
 
-- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names (Data Management Plan) (Version 4). Zenodo. https://doi.org/10.5281/zenodo.4733920
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names (Data Management Plan) (Version 5). Zenodo. https://doi.org/10.5281/zenodo.4733919
 - Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021). Classes of errors in DOI names: output dataset (Version v1.0.0) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4892551
-- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021, May 3). Cleaning different types of DOI errors found in cited references on Crossref using automated methods (Version 1). Zenodo. http://doi.org/10.5281/zenodo.4734513
+- Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021, June 8). Cleaning different types of DOI errors found in cited references on Crossref using automated methods (Version 2). Zenodo. http://doi.org/10.5281/zenodo.4734512
 - Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021, May). Presentation of "Cleaning different types of DOI errors found in cited references on Crossref using automated methods" (Version 1). Zenodo. http://doi.org/10.5281/zenodo.4738553
-- Ricarda Boente, Deniz Tural, Cristian Santini, Arcangelo Massari. (2021). Protocol: Investigating DOIs classes of errors V.4. protocols.io https://dx.doi.org/10.17504/protocols.io.bunnnvde
+- Ricarda Boente, Deniz Tural, Cristian Santini, Arcangelo Massari. (2021). Protocol: Investigating DOIs classes of errors V.5. protocols.io https://dx.doi.org/10.17504/protocols.io.buuknwuw
 - Peroni, Silvio. (2021). Citations to invalid DOI-identified entities obtained from processing DOI-to-DOI citations to add in COCI (Version 1.0) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.4625300
 - Xu, S., Hao, L., An, X. et al. Types of DOI errors of cited references in Web of Science with a cleaning method. Scientometrics 120, 1427–1437 (2019). https://doi.org/10.1007/s11192-019-03162-4
