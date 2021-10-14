@@ -199,10 +199,11 @@ class Clean_DOIs(object):
             print(f"[Clean_DOIs:INFO] Checking matches for class {category}")
             for regex in classes_of_errors[category]:
                 for row in data:
-                    doi = row["Invalid_cited_DOI"].upper()
-                    match = re.search(regex, doi)
-                    if match:
-                        classes_of_errors[category][regex] += 1
+                    if int(row["Already_valid"]) == 0 and row["Valid_DOI"]:
+                        doi = row["Invalid_cited_DOI"].upper()
+                        match = re.search(regex, doi)
+                        if match:
+                            classes_of_errors[category][regex] += 1
             pbar.update(1)
         pbar.close()
         return classes_of_errors

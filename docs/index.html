@@ -30,21 +30,21 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 <div class="row justify-content-center text-center pt-6">
                     <div class="col-lg-8 col-xl-8">
                         <h1 class="display-2 mb-5">Visualizing DOIs classes of errors</h1>
-                        <p class="lead px-md-6 mb-5">The visualizations show the results discussed in the article<br>
-                            <span>Boente, Ricarda, Massari, Arcangelo, Santini, Cristian, & Tural, Deniz. (2021, May 3). Cleaning different types of DOI errors found in cited references on Crossref using automated methods (Version 1). Zenodo.</span> 
-                            <a href="http://doi.org/10.5281/zenodo.4734513" alt="Link to the article" target="_blank">http://doi.org/10.5281/zenodo.4734513</a>.
-                        </p>
                     </div>
                 </div>
+                <p class="text-center lead px-md-6 mb-5">The visualizations show the results discussed in the article<br/>
+                    <span><em>Cleaning different types of DOI errors found in cited references on Crossref using automated methods</em>,<br/> by Ricarda Boente, Arcangelo Massari, Cristian Santini, & Deniz Tural (2021, June 8)<br/></span> 
+                    <a href="http://doi.org/10.5281/zenodo.4914003" alt="Link to the article" target="_blank">http://doi.org/10.5281/zenodo.4914003</a>
+                </p>
             </div>
         </section>
         <section class="text-justify">
             <div class="container">
                 <h2>Barplot</h2>
                 <p>The barplot helps to compare the values through the difference in length of the associated bars. 
-                    The values considered were the number of DOIs still invalid after the algorithm was run, 
-                    the number of valid ones and the number of DOIs associated with each considered error class, 
-                    i.e. DOIs already valid or containing prefix, suffix and other-type errors.
+                    The values considered were the number of <strong>valid citations</strong> after the algorithm was run, 
+                    and the number of citations associated with each considered error class, 
+                    i.e. cited DOIs containing <strong>prefix</strong>, <strong>suffix</strong> and <strong>other-type</strong> errors.
                     In addition, the bar chart allows comparing the results obtained through this study 
                     with those that would have been obtained using the regular expressions suggested in the article
                     <em>Types of DOI errors of cited references in Web of Science with a cleaning method</em> by Xu et al (2019),
@@ -57,7 +57,11 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     <div class="viz" id="doiErrorsViz"></div>    
                 </div>
                 <h2>Treemap</h2>
-                <p>The treemap helps to read the data from a <strong>hierarchical point of view</strong> and to compare the values through area differences. In this case, the root is made up of the set of all DOIs, which inside includes the DOIs still invalid after the algorithm has been run and those that have been corrected. This last category can be further subdivided into DOIs that are valid because they were already valid or because they contained prefix, suffix or other-type errors that have been corrected.</p>
+                <p>The treemap helps to read the data from a <strong>hierarchical point of view</strong> 
+                    and to compare the values through area differences. In this case, the root is made up of 
+                    the set of citations that were corrected by our cleaning procedure. 
+                    This last category can be further subdivided into citations that contained prefix, suffix or other-type errors 
+                    that were fixed.</p>
                 <div class="card bg-primary shadow-inset border-light p-4 mb-5" id="treemapContainer">
                     <div class="viz" id="doiErrorsTreemap"></div>    
                 </div>
@@ -89,12 +93,12 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
         var height_bc = $(document).height() / 1.8 - margin_bc.top - margin_bc.bottom
 
         pretty_labels = {
-            "Invalid_DOI": "Number of invalid DOIs after cleaning",
-            "Valid_DOI": "Number of valid DOIs after cleaning",
-            "Already_valid": "DOIs temporarily invalid now valid",
-            "Prefix_error": "Prefix errors fixed",
-            "Suffix_error": "Suffix errors fixed",
-            "Other-type_error": "Other type errors fixed"
+            "Invalid_DOI": "Invalid citations after cleaning",
+            "Valid_DOI": "Valid citations after cleaning",
+            "Already_valid": "Citations temporarily invalid now valid",
+            "Prefix_error": "Citations with fixed prefix errors",
+            "Suffix_error": "Citations with fixed suffix errors",
+            "Other-type_error": "Citations with fixed other type errors"
         }
 
         var thousandsFormatter = d3.format(",")
@@ -138,7 +142,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 return `
                 <strong>${d.author}</strong><br/>
                 <strong>Value</strong>: ${thousandsFormatter(d.value)}<br/>
-                <strong>Percentage</strong>: ${thousandsFormatter(d.value)} / ${thousandsFormatter(total)} (${(d.value/total*100).toFixed(1)}%)
+                <strong>Percentage</strong>: ${thousandsFormatter(d.value)} / ${thousandsFormatter(total_bp)} (${(d.value/total_bp*100).toFixed(1)}%)
                 `
             })
         }
@@ -183,8 +187,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 return `
                 <strong>Measure</strong>: ${pretty_labels[d.data.measure]}<br/>
                 <strong>Value</strong>: ${thousandsFormatter(d.value)}<br/>
-                <strong>Percentage</strong>: ${thousandsFormatter(d.value)} / ${thousandsFormatter(total)} (${(d.value/total*100).toFixed(1)}%)
-
+                <strong>Percentage</strong>: ${thousandsFormatter(d.value)} / ${thousandsFormatter(total_tm)} (${(d.value/total_tm*100).toFixed(1)}%)
                 `
             })
         }
@@ -200,7 +203,8 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
         }
 
         d3.json("./data_to_viz.json").then(data => {
-            total = data[0]["values"][0]["value"]
+            total_bp = data[0]["values"][0]["value"]
+            total_tm = data[1]["values"][0]["value"]
             data_to_bp = data.filter( el => el.measure !== "DOIs" ); 
             ////////////// Barplot visualization
             document.addEventListener("DOMContentLoaded", doiBarchart());

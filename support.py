@@ -12,7 +12,7 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
 # OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-from typing import Tuple
+from typing import Tuple, List, Set
 
 import requests, requests_cache, json, csv, os, ijson, random
 from requests import Session
@@ -114,4 +114,20 @@ class Support(object):
         for row in output:
             row["Really_valid"] = 0
         return output
+    
+def get_number_of_citations(data:List[List]) -> int:
+    output:List[Set] = list()
+    for data in data:
+        citations = set()
+        for row in data:
+            if row["Valid_DOI"]:
+                if "Already_valid" in row:
+                    if row["Already_valid"] == "0":
+                        citation = row["Valid_citing_DOI"] + row["Valid_DOI"]
+                        citations.add(citation)
+                else:
+                    citation = row["Valid_citing_DOI"] + row["Valid_DOI"]
+                    citations.add(citation)
+        output.append(len(citations))
+    return output
             

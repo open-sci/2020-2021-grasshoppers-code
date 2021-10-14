@@ -8,22 +8,8 @@
                 "value": 1223295
             },
             {
-                "author": "Reference procedure",
+                "author": "Procedure by (Xu et al., 2019)",
                 "value": 1223295
-            }
-        ]
-    },
-    {
-        "measure": "Invalid_DOI",
-        "parent": "DOIs",
-        "values": [
-            {
-                "author": "New procedure",
-                "value": 1024275
-            },
-            {
-                "author": "Reference procedure",
-                "value": 1085807
             }
         ]
     },
@@ -33,11 +19,11 @@
         "values": [
             {
                 "author": "New procedure",
-                "value": 199020
+                "value": 141809
             },
             {
-                "author": "Reference procedure",
-                "value": 137488
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 137474
             }
         ]
     },
@@ -47,25 +33,11 @@
         "values": [
             {
                 "author": "New procedure",
-                "value": 119146
+                "value": 119145
             },
             {
-                "author": "Reference procedure",
-                "value": 136541
-            }
-        ]
-    },
-    {
-        "measure": "Already_valid",
-        "parent": "Valid_DOI",
-        "values": [
-            {
-                "author": "New procedure",
-                "value": 57196
-            },
-            {
-                "author": "Reference procedure",
-                "value": 0
+                "author": "Procedure by (Xu et al., 2019)",
+                "value": 136527
             }
         ]
     },
@@ -75,10 +47,10 @@
         "values": [
             {
                 "author": "New procedure",
-                "value": 21742
+                "value": 21728
             },
             {
-                "author": "Reference procedure",
+                "author": "Procedure by (Xu et al., 2019)",
                 "value": 0
             }
         ]
@@ -92,7 +64,7 @@
                 "value": 953
             },
             {
-                "author": "Reference procedure",
+                "author": "Procedure by (Xu et al., 2019)",
                 "value": 953
             }
         ]

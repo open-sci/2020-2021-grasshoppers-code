@@ -1,4 +1,4 @@
-from support import Support
+from support import Support, get_number_of_citations
 from clean_dois import Clean_DOIs
 
 
@@ -16,7 +16,7 @@ clean_dois = Clean_DOIs(logs=doi_logs)
 # To check if DOIs are valid. The crossref_dois parameter is optional
 checked_dois = clean_dois.check_dois_validity(data=data, autosave_path="./cache/checked_dois.csv")
 
-# To clean DOIs
+# # To clean DOIs
 output = clean_dois.procedure(data=checked_dois, autosave_path="./cache/output.csv")
 Support().dump_csv(data=output, path="./output/output.csv")
 if len(doi_logs) > 0:
@@ -24,9 +24,16 @@ if len(doi_logs) > 0:
     Support().dump_json(doi_logs, "./logs/doi_logs.json")
 
 # To get the number of matches of each sub-class of factual errors
-number_of_matches = clean_dois.get_number_of_matches(data=data)
+output = Support.process_csv_input(path="./output/output.csv")
+number_of_matches = clean_dois.get_number_of_matches(data=output)
 print(number_of_matches)
 
+# To get the number of valid citations after the cleaning procedure
+output = Support.process_csv_input(path="./output/output.csv")
+xu = Support.process_csv_input(path="./output/xu_2019_results.csv")
+data = [output, xu]
+number_of_citations = get_number_of_citations(data=data)
+print(number_of_citations)
 
 
 

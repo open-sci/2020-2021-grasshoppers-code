@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Set
 import csv, json
 
 output = list()
@@ -14,8 +14,37 @@ def dump_json(json_data:dict, path:str) -> None:
         print(f"[Support: INFO] Writing json to path {path}")
         json.dump(json_data, outfile, sort_keys=True, indent=4)
 
+def get_number_of_citations_per_field(data:List[Dict], fields:set) -> int:
+    output:Dict[str, set] = dict()
+    for field in fields:
+        output[field] = set()
+    for row in data:
+        for field in fields:
+            to_be_added = False
+            try:
+                if int(row[field]) == 1:
+                    to_be_added = True
+            except ValueError:
+                if row[field]:
+                    to_be_added = True
+            if to_be_added:
+                if field == "Valid_citing_DOI":
+                    output[field].add(row["Valid_citing_DOI"] + row["Invalid_cited_DOI"])
+                else:
+                    output[field].add(row["Valid_citing_DOI"] + row["Valid_DOI"])
+    return {k:len(v) for k,v in output.items()}
+
+
 output:List[Dict] = process_csv_input(path="./output/output.csv")
-xu:List[Dict] = process_csv_input(path="./output/xu_2019_results_no_already_valid.csv")
+xu:List[Dict] = process_csv_input(path="./output/xu_2019_results.csv")
+
+citations = set()
+for row in output:
+    citations.add(row["Valid_citing_DOI"] + row["Invalid_cited_DOI"])
+print(len(citations))
+
+output = get_number_of_citations_per_field(output, {"Valid_citing_DOI", "Valid_DOI", "Already_valid", "Prefix_error", "Suffix_error", "Other-type_error"})
+xu = get_number_of_citations_per_field(xu, {"Valid_citing_DOI", "Valid_DOI", "Prefix_error", "Suffix_error", "Other-type_error"})
 
 output_to_viz = [
     {
@@ -24,25 +53,11 @@ output_to_viz = [
         "values": [
             {
                 "author": "New procedure",
-                "value": len(output)
+                "value": output["Valid_citing_DOI"]
             },
             {
                 "author": "Procedure by (Xu et al., 2019)",
-                "value": len(output)
-            }
-        ]
-    },
-    {
-        "measure": "Invalid_DOI",
-        "parent": "DOIs",
-        "values": [
-            {
-                "author": "New procedure",
-                "value": len(output)
-            },
-            {
-                "author": "Procedure by (Xu et al., 2019)",
-                "value": len(output)
+                "value": xu["Valid_citing_DOI"]
             }
         ]
     },
@@ -52,25 +67,11 @@ output_to_viz = [
         "values": [
             {
                 "author": "New procedure",
-                "value": 0
+                "value": output["Valid_DOI"] - output["Already_valid"]
             },
             {
                 "author": "Procedure by (Xu et al., 2019)",
-                "value": 0
-            }
-        ]
-    },
-    {
-        "measure": "Already_valid",
-        "parent": "Valid_DOI",
-        "values": [
-            {
-                "author": "New procedure",
-                "value": 0
-            },
-            {
-                "author": "Procedure by (Xu et al., 2019)",
-                "value": 0
+                "value": xu["Valid_DOI"]
             }
         ]
     },
@@ -80,11 +81,11 @@ output_to_viz = [
         "values": [
             {
                 "author": "New procedure",
-                "value": 0
+                "value": output["Prefix_error"]
             },
             {
                 "author": "Procedure by (Xu et al., 2019)",
-                "value": 0
+                "value": xu["Prefix_error"]
             }
         ]
     },
@@ -94,11 +95,11 @@ output_to_viz = [
         "values": [
             {
                 "author": "New procedure",
-                "value": 0
+                "value": output["Suffix_error"]
             },
             {
                 "author": "Procedure by (Xu et al., 2019)",
-                "value": 0
+                "value": xu["Suffix_error"]
             }
         ]
     },
@@ -108,37 +109,15 @@ output_to_viz = [
         "values": [
             {
                 "author": "New procedure",
-                "value": 0
+                "value": output["Other-type_error"]
             },
             {
                 "author": "Procedure by (Xu et al., 2019)",
-                "value": 0
+                "value": xu["Other-type_error"]
             }
         ]
     }
 ]
-
-for row in output:
-    for k,v in row.items():
-        if k == "Valid_DOI" and v != "":
-            valid_doi_count = next((item for item in output_to_viz if item["measure"] == k))
-            invalid_doi_count = next((item for item in output_to_viz if item["measure"] == "Invalid_DOI"))
-            valid_doi_count["values"][0]["value"] += 1
-            invalid_doi_count["values"][0]["value"] -= 1
-        elif k in ["Already_valid", "Prefix_error", "Suffix_error", "Other-type_error"]:
-            class_count = next((item for item in output_to_viz if item["measure"] == k))
-            class_count["values"][0]["value"] += int(v)
-
-for row in xu:
-    for k,v in row.items():
-        if k == "Valid_DOI" and v != "":
-            valid_doi_count = next((item for item in output_to_viz if item["measure"] == k))
-            invalid_doi_count = next((item for item in output_to_viz if item["measure"] == "Invalid_DOI"))
-            valid_doi_count["values"][1]["value"] += 1
-            invalid_doi_count["values"][1]["value"] -= 1
-        elif k in ["Prefix_error", "Suffix_error", "Other-type_error"]:
-            class_count = next((item for item in output_to_viz if item["measure"] == k))
-            class_count["values"][1]["value"] += int(v)
 
 output_to_viz.sort(key = lambda i: i["values"][0]["value"], reverse=True)
 dump_json(json_data=output_to_viz, path="./docs/data_to_viz.json")
