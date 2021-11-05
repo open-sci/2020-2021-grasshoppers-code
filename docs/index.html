@@ -88,7 +88,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js" integrity="sha512-cd6CHE+XWDQ33ElJqsi0MdNte3S+bQY819f7p3NUHgwQQLXSKjE4cPZTeGNI+vaxZynk1wVU3hoHmow3m089wA==" crossorigin="anonymous"></script>    
     <script>
-        var margin_bc = { left: 245, right: 65, top: 100, bottom: 10 }
+        var margin_bc = { left: 340, right: 40, top: 100, bottom: 10 }
         var width_bc = $("#barChartContainer").width() - margin_bc.left - margin_bc.right
         var height_bc = $(document).height() / 1.8 - margin_bc.top - margin_bc.bottom
 
@@ -105,7 +105,7 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
 
         // Create a select dropdown
         const bcOrderSelector = document.getElementById("bcOrderSelector");
-        const leSelectItems = ["Descendingly new procedure", "Ascendingly new procedure", "Descendingly (Xu et al., 2019)", "Ascendigly (Xu et al., 2019)"];
+        const leSelectItems = ["Descendingly new procedure", "Ascendingly new procedure", "Descendingly Xu et al., 2019", "Ascendigly Xu et al., 2019"];
         // Create a drop down
         d3.select(bcOrderSelector)
             .append("select")
@@ -246,11 +246,12 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 var yAxisCall = d3.axisLeft(y0);
                 g_doi.append("g")
                     .attr("class", "y-axis")
-                    .style("font-size", "14px")
+                    .style("font-size", "1.3rem")
+                    .style("font-family", "sans-serif")
+                    .style("color", "black")
                     .call(yAxisCall)
                     .selectAll("text")
                     .attr("text-anchor", "end")
-                    // .call(wrap, margin_bc.left)
 
                 var xAxisCall = d3.axisTop(x)
                     .tickFormat((d, i) => {
@@ -262,7 +263,9 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     });
                 g_doi.append("g")
                     .attr("class", "x-axis")
-                    .style("font-size", "14px")
+                    .style("font-size", "1.3rem")
+                    .style("font-family", "sans-serif")
+                    .style("color", "black")
                     .call(xAxisCall);
 
                 //Bars
@@ -310,7 +313,9 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     .text(function(datum) { 
                         return thousandsFormatter(datum.value);
                     })
-                    .attr("fill", "#262833");
+                    .attr("font-size", "1.3rem")
+                    .style("font-family", "sans-serif")
+                    .style("color", "black")
 
                 //Legend
                 var legend_bc = g_doi.selectAll(".legend")
@@ -332,6 +337,9 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     .attr("y", -91)
                     .attr("dy", ".35em")
                     .style("text-anchor", "end")
+                    .style("font-size", "1.3rem")
+                    .style("color", "black")
+                    .style("font-family", "sans-serif")
                     .text(function (d) {
                         return d
                     });
@@ -354,9 +362,9 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                     data_to_bp.sort((a, b) => d3.ascending(+a.values[0].value, +b.values[0].value))
                 } else if (selectedOption == "Descendingly new procedure") {
                     data_to_bp.sort((a, b) => d3.descending(+a.values[0].value, +b.values[0].value))
-                } else if (selectedOption == "Ascendigly (Xu et al., 2019)") {
+                } else if (selectedOption == "Ascendigly Xu et al., 2019") {
                     data_to_bp.sort((a, b) => d3.ascending(+a.values[1].value, +b.values[1].value))
-                } else if (selectedOption == "Descendingly (Xu et al., 2019)") {
+                } else if (selectedOption == "Descendingly Xu et al., 2019") {
                     data_to_bp.sort((a, b) => d3.descending(+a.values[1].value, +b.values[1].value))
                 }
                 doiBarchart();
@@ -399,9 +407,8 @@ OR PERFORMANCE OF THIS SOFTWARE. -->
                 .attr("x", function (d) { return d.x0 + 10 })    // +10 to adjust position (more right)
                 .attr("y", function (d) { return d.y0 + 30 })    // +20 to adjust position (lower)
                 .text(function (d) { return pretty_labels[d.data.measure] })
-                .attr("font-size", "20px")
-                .attr("font-weight", "bold")
-                .attr("fill", "#262833")
+                .attr("font-size", "1.3rem")
+                .style("font-family", "sans-serif")
                 .call(wrap, 150)
                 .style('opacity', function(d){
                     dx = d.x1 - d.x0

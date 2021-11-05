@@ -14,7 +14,7 @@
 
 from typing import Tuple, List, Set
 
-import requests, requests_cache, json, csv, os, ijson, random
+import requests, requests_cache, json, csv, os, ijson, random, re
 from requests import Session
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -115,19 +115,25 @@ class Support(object):
             row["Really_valid"] = 0
         return output
     
-def get_number_of_citations(data:List[List]) -> int:
+def get_number_of_citations(data:List[List], regex:str="") -> int:
     output:List[Set] = list()
     for data in data:
         citations = set()
         for row in data:
             if row["Valid_DOI"]:
-                if "Already_valid" in row:
-                    if row["Already_valid"] == "0":
-                        citation = row["Valid_citing_DOI"] + row["Valid_DOI"]
-                        citations.add(citation)
-                else:
-                    citation = row["Valid_citing_DOI"] + row["Valid_DOI"]
-                    citations.add(citation)
+                if row["Already_valid"] == "0":
+                    if regex:
+                        match = re.search(regex, row["Invalid_cited_DOI"].upper())
+                        if match:
+                            citations.add(row["Valid_citing_DOI"] + row["Valid_DOI"])
+                    else:
+                        citations.add(row["Valid_citing_DOI"] + row["Valid_DOI"])
         output.append(len(citations))
     return output
-            
+
+def compare_number_of_matches(new_procedure_matches:dict, reference_procedure_matches:set) -> dict:
+    diff = dict()
+    for error_type, expressions in reference_procedure_matches.items():
+        for regex, matches in expressions.items(): 
+            diff[regex] = new_procedure_matches[error_type][regex] - matches
+    return sorted(diff.items(), key=lambda item: item[1], reverse=True)
