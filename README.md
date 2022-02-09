@@ -14,17 +14,17 @@ Before starting, you need to make sure you have Python3.x installed on your comp
 
 ## Reproduce the experiment
 To reproduce the paper experiment clone the GitHub repository on your machine and launch the following command in a prompt inside the repository:
-```
+```bash
 python tutorial.py
 ```
 This command will launch the cleaning procedure on the dataset "invalid_dois.csv" in the dataset folder. The dataset is provided on public license by [Silvio Peroni (2021)](http://doi.org/10.5281/zenodo.4625300).
 If you want to apply the cleaning procedure on another dataset, first verify that your dataset is a CSV file compliant with the fields used in our data and then modify the following line in the tutorial.py file
-```
+```python
 data = Support.process_csv_input(path=path_to_data)
 ```
 Beware that the algorithm will require days for huge amount of data, like in this research (e.g. > 1M rows).<br/>
 If you want to speed up the process, you can unzip the "crossref_dois.zip" archive in the dataset folder and then add the following line after importing your data in tutorial.py
-```
+```python
 crossref_dois = Support.process_csv_input(path="./dataset/crossref_dois.csv")
 ```
 **Note:** This line will allow to perform the DOI validation through a list of DOI registered by Crossref available in the dataset folder. It is recommended to perform the following step having at least 64GB of RAM, as over 120 million DOIs need to be stored in a set and kept on RAM throughout the execution of our software.
