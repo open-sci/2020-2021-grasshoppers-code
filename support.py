@@ -14,10 +14,10 @@
 
 from typing import Tuple, List, Set
 
-import requests, requests_cache, json, csv, os, ijson, random, re
+import requests, requests_cache, json, csv, os, ijson, re
 from requests import Session
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util import Retry
 from tqdm import tqdm
 
 
@@ -104,17 +104,7 @@ class Support(object):
             pbar.update(1)
         pbar.close()
         return dois
-    
-    @staticmethod
-    def get_random_results(data:list, number:int=100) -> list:
-        output = random.sample(
-            [i for i in data if len(i["Valid_DOI"]) > 0 and int(i["Already_valid"]) == 0], 
-            number
-        )
-        for row in output:
-            row["Really_valid"] = 0
-        return output
-    
+        
 def get_number_of_citations(data:List[List], regex:str="") -> int:
     output:List[Set] = list()
     for data in data:

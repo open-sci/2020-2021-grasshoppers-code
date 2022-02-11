@@ -14,9 +14,8 @@
 
 from typing import Tuple
 
-import re, csv
-from collections import defaultdict
-from itertools import product, islice
+import re
+from itertools import islice
 from tqdm import tqdm
 from support import Support
 
