@@ -2,7 +2,6 @@ import random
 import re
 from csv import DictReader, DictWriter
 from clean_dois import Clean_DOIs
-from support import Support
 from math import ceil
 from typing import List, Set, Dict
 
@@ -123,7 +122,9 @@ if __name__ == '__main__':
     wanted_patterns['Other-type_error'] = ['\\\\', '__', '\\.\\.', '<.*?>.*?</.*?>', '<.*?/>']
     with open(PREFERABLE_CITATIONS, 'r', encoding='utf-8') as f:
         wanted_citation_data = list(DictReader(f))
+        # That is, the citations manually checked in the preprint (https://arxiv.org/abs/2111.11263)
         preferable_citations = __get_fields_as_tuples_set(data=wanted_citation_data, fields=('Valid_citing_DOI', 'Invalid_cited_DOI'))
+    # That is, the two problematic citations already analyzed in the preprint (https://arxiv.org/abs/2111.11263)
     mandatory_citations = {('10.17660/actahortic.2020.1288.20', '10.1007/978-3-319-90698-0_26.'), ('10.1101/539833', '10.1007/s10479-011-0841-3.')}
     with open(DATA, 'r', encoding='utf-8') as f:
         data = list(DictReader(f))
