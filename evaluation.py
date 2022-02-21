@@ -7,11 +7,12 @@ from typing import List, Set, Dict
 
 
 DATA = './output/output.csv'
+# The citations manually checked in the preprint (https://arxiv.org/abs/2111.11263)
 PREFERABLE_CITATIONS = './output/100_random_cleaned_dois.csv'
-OUTPUT_PATH = './output/10_random_cleaned_dois_per_rule.csv'
+OUTPUT_PATH = './output/10_random_citations_per_rule.csv'
 
 
-def get_random_results(data:List[dict], number:int=100, preferable_citations:Set[tuple]=None, mandatory_citations:set=set(), wanted_patterns:Dict[str, List]=dict()) -> List[dict]:
+def get_random_results(data:List[dict], number:int=100, preferable_citations:Set[tuple]=None, mandatory_citations:set=None, wanted_patterns:Dict[str, List]=None) -> List[dict]:
     '''
     This function selects a number of random citations within a list. 
     If you specify patterns, the citations will be chosen so that each pattern appears the same number of times within the desired total of citations. 
@@ -32,35 +33,38 @@ def get_random_results(data:List[dict], number:int=100, preferable_citations:Set
     :returns: List[dict] -- This function returns a list of dictionaries, that is, a number of random elements from the input list. The result is partially random if the preferred_citations or mandatory_citations parameters were specified
     '''
     output = list()
+    included_citations = set()
     if all(arg is None for arg in [preferable_citations, mandatory_citations, wanted_patterns]):
         output = random.sample(
             [i for i in data if len(i['Valid_DOI']) > 0 and int(i['Already_valid']) == 0], 
             number
         )
     if (preferable_citations or mandatory_citations) and not wanted_patterns:
-        output.extend(__include_wanted_citations(data, number, preferable_citations, mandatory_citations))
+        output.extend(__include_wanted_citations(data, number, included_citations, preferable_citations, mandatory_citations))
     if wanted_patterns:
         number_of_patters = sum(len(patterns) for _, patterns in wanted_patterns.items())
         number_of_matches = ceil(number / number_of_patters)
         for pattern_type, patterns in wanted_patterns.items():
             for pattern in patterns:
-                rows_by_pattern = __include_wanted_citations(data, number_of_matches, preferable_citations, mandatory_citations, (pattern_type, pattern))
+                rows_by_pattern = __include_wanted_citations(data, number_of_matches, included_citations, preferable_citations, mandatory_citations, (pattern_type, pattern))
                 output.extend(rows_by_pattern)
     return output
 
-def __include_wanted_citations(data:list, number:int, preferable_citations:Set[tuple], mandatory_citations:set=set(), pattern:tuple=None) -> list:
+def __include_wanted_citations(data:list, number:int, included_citations:Set[tuple], preferable_citations:Set[tuple], mandatory_citations:set=set(), pattern:tuple=None) -> list:
     output = list()
     if mandatory_citations:
         relevant_rows = [row for row in data if (row['Valid_citing_DOI'], row['Invalid_cited_DOI']) in mandatory_citations]
         processed_data, number = __process_wanted_citations(relevant_rows, preferable_citations, number, pattern)
         output.extend(processed_data)
     if preferable_citations:
-        processed_data, number = __process_wanted_citations(data, preferable_citations, number, pattern)
+        processed_data, number = __process_wanted_citations(data, preferable_citations.difference(mandatory_citations), number, pattern)
         output.extend(processed_data)
+    included_citations.update({(row['Valid_citing_DOI'], row['Invalid_cited_DOI']) for row in output})
     if number > 0:
         population = list()
         for row in data:
-            new_citation = (row['Valid_citing_DOI'], row['Invalid_cited_DOI']) not in preferable_citations
+            cur_citation = (row['Valid_citing_DOI'], row['Invalid_cited_DOI'])
+            new_citation = cur_citation not in included_citations
             matches_pattern = re.search(pattern[1], row['Invalid_cited_DOI'].upper()) if pattern else True
             error_type = next((error_type for error_type in {'Prefix_error', 'Suffix_error', 'Other-type_error'} if row[error_type] == '1'), None)
             matches_error_type = pattern[0] == error_type if pattern else True
@@ -69,6 +73,7 @@ def __include_wanted_citations(data:list, number:int, preferable_citations:Set[t
                 if pattern:
                     new_row['Pattern'] = pattern[1]
                 population.append(new_row)
+                included_citations.add(cur_citation)
         if len(population) > number:
             output.extend(random.sample(population, number))
         else:
@@ -93,7 +98,7 @@ def __process_wanted_citations(data:list, preferable_citations:set, number:int, 
                 break
     return output, number
 
-def __get_fields_as_tuples_set(data:list, fields:tuple) -> Set[tuple]:
+def get_fields_as_tuples_set(data:list, fields:tuple) -> Set[tuple]:
     tuples_set = set()
     for row in data:
         relevant_data = list()
@@ -123,7 +128,7 @@ if __name__ == '__main__':
     with open(PREFERABLE_CITATIONS, 'r', encoding='utf-8') as f:
         wanted_citation_data = list(DictReader(f))
         # That is, the citations manually checked in the preprint (https://arxiv.org/abs/2111.11263)
-        preferable_citations = __get_fields_as_tuples_set(data=wanted_citation_data, fields=('Valid_citing_DOI', 'Invalid_cited_DOI'))
+        preferable_citations = get_fields_as_tuples_set(data=wanted_citation_data, fields=('Valid_citing_DOI', 'Invalid_cited_DOI'))
     # That is, the two problematic citations already analyzed in the preprint (https://arxiv.org/abs/2111.11263)
     mandatory_citations = {('10.17660/actahortic.2020.1288.20', '10.1007/978-3-319-90698-0_26.'), ('10.1101/539833', '10.1007/s10479-011-0841-3.')}
     with open(DATA, 'r', encoding='utf-8') as f:
